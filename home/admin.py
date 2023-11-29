@@ -55,3 +55,14 @@ class ListandoTitulos(admin.ModelAdmin):
         'observacao', 'usuario', )
     
 admin.site.register(Titulo, ListandoTitulos)
+
+
+class ListandoAnexos(admin.ModelAdmin):
+    list_display = ('titulo', 'descricao',)
+    list_display_links = ('titulo', 'descricao', )
+    search_fields = ('titulo', 'descricao', )
+    list_per_page = 30
+    ordering = ('titulo', 'descricao',)
+    fields = ('titulo', 'descricao', 'arquivo' )
+    
+admin.site.register(Anexo, ListandoAnexos)

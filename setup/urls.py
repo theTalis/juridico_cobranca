@@ -8,6 +8,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name="home"),
     path('submit_login', submit_login, name="submit_login"),
+    path('cadastro', cadastro, name="cadastro"),
+    path('importacao', importacao, name="importacao"),
     path('logout', logout, name="logout"),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

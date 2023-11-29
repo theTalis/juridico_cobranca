@@ -31,3 +31,9 @@ def logout(request):
     messages.success(
         request, 'Logout efetuado')
     return render(request, 'login.html')
+
+def cadastro(request):
+    return render(request, 'cadastro.html')
+
+def importacao(request):
+    return render(request, 'importacao.html')

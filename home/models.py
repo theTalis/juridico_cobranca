@@ -72,3 +72,17 @@ class Titulo(models.Model):
 
     def __str__(self):
         return f'{self.cedente} - {self.sacado} / {self.valor}'
+
+
+class Anexo(models.Model):
+    class Meta:
+        db_table = 'anexo'
+    titulo = models.ForeignKey(Titulo, on_delete=models.CASCADE)
+    descricao = models.CharField(max_length=60, null=True, blank=True)
+    arquivo = models.FileField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.titulo} - {self.created_at}'
