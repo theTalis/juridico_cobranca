@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block content %}
+<body class="antialiased border-top-wide border-primary d-flex flex-column">
+    <div class="flex-fill d-flex flex-column justify-content-center py-4">
+        <div class="container-tight py-6">
+            <!--<div class="text-center mb-4">
+                <a href="."><img src="./static/logo.svg" height="36" alt=""></a>
+            </div>-->
+            <form class="card card-md" action="{% url 'submit_login' %}" method="post" autocomplete="off">
+                {% csrf_token %}
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Efetue seu login no T2Bank</h2>
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }}" role="alert">
+                                    <div class="text-muted">{{ message }}</div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        <div class="mb-3">
+                            <label class="form-label">Login</label>
+                            <input id="cpf" name="cpf" type="text" class="form-control" placeholder="Ex: 000.000.000-00">
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">
+                                Senha
+                                <span class="form-label-description">
+                                    <a href="{% url 'alteracao_senha' %}">Esqueceu sua senha?</a>
+                                </span>
+                            </label>
+                        <div class="input-group input-group-flat">
+                            <input type="password" id="senha" name="senha" class="form-control"  placeholder="Senha" autocomplete="off">
+                        </div>
+                        <div class="form-footer">
+                            <button type="submit" class="btn btn-primary w-100">Entrar</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="text-center text-muted mt-3">
+                Não tem uma conta? <a href="{% url 'criar_login' %}" tabindex="-1">Cadastre-se</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+
+    <script>
+        $("#cpf").keydown(function(){
+            try {
+                $("#cpf").unmask();
+            } catch (e) {}
+
+            $("#cpf").mask("999.999.999-99");
+
+            // ajustando foco
+            var elem = this;
+            setTimeout(function(){
+                // mudo a posição do seletor
+                elem.selectionStart = elem.selectionEnd = 10000;
+            }, 0);
+            // reaplico o valor para mudar o foco
+            var currentValue = $(this).val();
+            $(this).val('');
+            $(this).val(currentValue);
+        });
+    </script>
+</body>
+{% endblock %}
