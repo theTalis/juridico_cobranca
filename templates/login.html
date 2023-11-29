@@ -21,25 +21,12 @@
                             <label class="form-label">Login</label>
                             <input id="cpf" name="cpf" type="text" class="form-control" placeholder="Ex: 000.000.000-00">
                         </div>
-                        <div class="mb-2">
-                            <label class="form-label">
-                                Senha
-                                <span class="form-label-description">
-                                    <a href="{% url 'alteracao_senha' %}">Esqueceu sua senha?</a>
-                                </span>
-                            </label>
-                        <div class="input-group input-group-flat">
-                            <input type="password" id="senha" name="senha" class="form-control"  placeholder="Senha" autocomplete="off">
-                        </div>
                         <div class="form-footer">
                             <button type="submit" class="btn btn-primary w-100">Entrar</button>
                         </div>
                     </div>
                 </div>
             </form>
-            <div class="text-center text-muted mt-3">
-                Não tem uma conta? <a href="{% url 'criar_login' %}" tabindex="-1">Cadastre-se</a>
-            </div>
         </div>
     </div>
 
