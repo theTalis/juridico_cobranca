@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import authenticate
+from .services import *
 
 def home(request):
     if not 'user' in request.session:
@@ -33,7 +34,22 @@ def logout(request):
     return render(request, 'login.html')
 
 def cadastro(request):
-    return render(request, 'cadastro.html')
+    params = {
+        "cedentes": get_cedentes(),
+        "sacados": get_sacados(),
+        "pagadores": get_pagadores(),
+        "formas_contato": get_formas_contato()
+    }
+    return render(request, 'cadastro.html', params)
 
 def importacao(request):
     return render(request, 'importacao.html')
+
+def submit_cadastro(request):
+    erros_cadastro = get_erros_cadastro(request)
+    if erros_cadastro == None:
+        set_titulo(request)
+        messages.success(request, 'Cadastro gravado com sucesso')
+    else:
+        messages.warning(request, erros_cadastro)
+    return redirect('cadastro')

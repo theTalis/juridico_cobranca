@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
+import uuid
 
 User = get_user_model()
 
@@ -8,7 +9,7 @@ class Cedente(models.Model):
     class Meta:
         db_table = 'cedente'
     nome = models.CharField(max_length=60)
-    contato = models.CharField(max_length=100)
+    contato = models.CharField(max_length=100, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
@@ -20,7 +21,7 @@ class Sacado(models.Model):
     class Meta:
         db_table = 'sacado'
     nome = models.CharField(max_length=60)
-    contato = models.CharField(max_length=100)
+    contato = models.CharField(max_length=100, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
@@ -57,6 +58,7 @@ class FormaContato(models.Model):
 class Titulo(models.Model):
     class Meta:
         db_table = 'titulo'
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, null=False, blank=True)
     cedente = models.ForeignKey(Cedente, on_delete=models.CASCADE)
     sacado = models.ForeignKey(Sacado, on_delete=models.CASCADE)
     valor = models.FloatField(null=True, blank=True)

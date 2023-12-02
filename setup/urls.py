@@ -12,4 +12,6 @@ urlpatterns = [
     path('importacao', importacao, name="importacao"),
     path('logout', logout, name="logout"),
 
+    path('submit_cadastro', submit_cadastro, name="submit_cadastro"),
+
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
