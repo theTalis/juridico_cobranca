@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import authenticate
 from .services import *
+from django.core.files.storage import FileSystemStorage
 
 def home(request):
     if not 'user' in request.session:
@@ -53,3 +54,26 @@ def submit_cadastro(request):
     else:
         messages.warning(request, erros_cadastro)
     return redirect('cadastro')
+
+def submit_importacao(request):
+    if request.method == 'POST' and request.FILES['file']:
+        file = request.FILES['file']
+        content = file.read()
+
+        set_arquivo(file)
+        
+        lines = content.splitlines()
+        for line in lines:
+            line = str(line)
+            items = line.split(',')
+
+            if len(items[4]) > 0:
+                dados = {
+                    'cedente': items[0]
+                }
+                import_titulo(dados)
+
+    messages.success(request, 'Dados importados com sucesso')
+    return redirect('importacao')
+    
+    

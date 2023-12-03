@@ -66,6 +66,8 @@ class Titulo(models.Model):
     pagador = models.CharField(choices=Pagador.choices, default=Pagador.CEDENTE, max_length=10, null=True, blank=True)
     situacao = models.ForeignKey(Situacao, on_delete=models.CASCADE, null=True, blank=True)
     forma_contato = models.ForeignKey(FormaContato, on_delete=models.CASCADE, null=True, blank=True)
+    data_vencimento = models.DateField(null=True, blank=True)
+    data_pagamento = models.DateField(null=True, blank=True)
     observacao = models.TextField(null=True, blank=True)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -88,3 +90,14 @@ class Anexo(models.Model):
 
     def __str__(self):
         return f'{self.titulo} - {self.created_at}'
+
+class Arquivo(models.Model):
+    class Meta:
+        db_table = 'arquivo'
+    file = models.CharField(max_length=600)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+    
+    def __str__(self):
+        return f'{self.file}'

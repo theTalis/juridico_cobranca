@@ -52,7 +52,7 @@ class ListandoTitulos(admin.ModelAdmin):
     list_per_page = 30
     ordering = ('valor',)
     fields = ('cedente', 'sacado', 'valor', 'contato', 'pagador', 'situacao', 'forma_contato',
-        'observacao', 'usuario', )
+        'observacao', 'data_vencimento', 'data_pagamento', 'usuario', )
     
 admin.site.register(Titulo, ListandoTitulos)
 
@@ -66,3 +66,14 @@ class ListandoAnexos(admin.ModelAdmin):
     fields = ('titulo', 'descricao', 'arquivo' )
     
 admin.site.register(Anexo, ListandoAnexos)
+
+
+class ListandoArquivos(admin.ModelAdmin):
+    list_display = ('file',)
+    list_display_links = ('file', )
+    search_fields = ('file', )
+    list_per_page = 30
+    ordering = ('file',)
+    fields = ('file',)
+    
+admin.site.register(Arquivo, ListandoArquivos)
