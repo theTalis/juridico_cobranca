@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<body class="antialiased">
+    <div class="wrapper">
+        <aside class="navbar navbar-vertical navbar-expand-lg navbar-dark" data-bs-theme="dark">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark">
+                </h1>
+                <div class="navbar-nav flex-row d-lg-none">
+                </div>
+                <div class="collapse navbar-collapse" id="navbar-menu">
+                    <ul class="navbar-nav pt-lg-3">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'home' %}" >
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="5 12 3 12 12 3 21 12 19 12" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
+                                </span>
+                                <span class="nav-link-title">
+                                    Principal
+                                </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'cadastro' %}" >
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/report-money -->
+                                	<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clipboard-list" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /><path d="M9 12l.01 0" /><path d="M13 12l2 0" /><path d="M9 16l.01 0" /><path d="M13 16l2 0" /></svg>
+                                </span>
+                                <span class="nav-link-title">
+                                    Cadastro
+                                </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'importacao' %}" >
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/report-money -->
+                                	<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-import" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M5 13v-8a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2h-5.5m-9.5 -2h7m-3 -3l3 3l-3 3" /></svg>
+                                </span>
+                                <span class="nav-link-title">
+                                    Importação
+                                </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-red" href="{% url 'logout' %}" >
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/logout -->
+                                	<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" /><path d="M7 12h14l-3 -3m0 6l3 -3" /></svg>
+                                </span>
+                                <span class="nav-link-title">
+                                    Sair
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+        <div class="page-wrapper">
+            <div class="container-fluid">
+                <!-- Page title -->
+                <div class="page-header d-print-none">
+                    <div class="col-12 align-items-center">
+                        <div class="row">
+                            <div class="col">
+                                <!-- Page pre-title -->
+                                <h2 class="page-title">
+                                    Cadastro de novo Título
+                                </h2>
+                            </div>
+                        </div>
+                        <!-- Page title actions -->
+                    </div>
+                </div>
+            </div>
+            <div class="page-body">
+                <div class="container-fluid">
+                    <form class="card card-md" action="{% url 'submit_cadastro' %}" method="post">
+                        {% csrf_token %}
+                        <div class="card-body">
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="alert alert-{{ message.tags }}" role="alert">
+                                        <div class="text-muted">{{ message }}</div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                            <div class="mb-3">
+                                <label class="form-label" for="cedente">Cedente</label>
+                                {% comment %} <select name="cedente" class="form-select" aria-label="Cedente">
+                                {% for cedente in cedentes %}
+                                    <option value="{{ cedente.id }}">{{ cedente.nome }}</option>
+                                {% endfor %}
+                                </select> {% endcomment %}
+                                <input type="text" class="form-control" name="cedente" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="sacado">Sacado</label>
+                                {% comment %} <select name="cedente" class="form-select" aria-label="Cedente">
+                                {% for cedente in cedentes %}
+                                    <option value="{{ cedente.id }}">{{ cedente.nome }}</option>
+                                {% endfor %}
+                                </select> {% endcomment %}
+                                <input type="text" class="form-control" name="sacado" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="valor">Valor</label>
+                                <input type="text" class="form-control" id="valor" name="valor" placeholder="Ex: R$ 0,00" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="forma_contato">Forma contato</label>
+                                <select id="forma_contato" name="forma_contato" class="form-select" aria-label="Forma contato" required>
+                                <option value="">Selecione a forma de contato</option>
+                                {% for forma_contato in formas_contato %}
+                                    <option value="{{ forma_contato.descricao }}">{{ forma_contato.descricao }}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="contato">Contato</label>
+                                <input type="text" class="form-control" id="contato" name="contato" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="pagador">Pagador</label>
+                                <select name="pagador" class="form-select" aria-label="Pagador" required>
+                                <option value="">Selecione o pagador</option>
+                                {% for value, text  in pagadores %}
+                                    <option value="{{ value }}">{{ text }}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="data_vencimento">Data vencimento</label>
+                                <input type="date" class="form-control" name="data_vencimento">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="observacao">Observação</label>
+                                <textarea class="form-control" name="observacao" rows="3"></textarea>
+                            </div>
+                            <div class="form-footer">
+                                <button type="submit" class="btn btn-primary w-100">Confirmar Cadastro</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>    
+    <script src="https://unpkg.com/@tabler/core@latest/dist/libs/apexcharts/dist/apexcharts.min.js"></script>
+    <script src="https://unpkg.com/@tabler/core@latest/dist/js/tabler.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.5/jquery.inputmask.min.js" integrity="sha512-sR3EKGp4SG8zs7B0MEUxDeq8rw9wsuGVYNfbbO/GLCJ59LBE4baEfQBVsP2Y/h2n8M19YV1mujFANO1yA3ko7Q==" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function(){
+            $("#valor").inputmask( 'currency',{"autoUnmask": true,
+                radixPoint:",",
+                groupSeparator: ".",
+                allowMinus: false,
+                prefix: 'R$ ',            
+                digits: 2,
+                digitsOptional: false,
+                rightAlign: false,
+                unmaskAsNumber: true,
+                removeMaskOnSubmit: true
+            });
+
+            $("#forma_contato").on("change", function() {
+                $("#contato").unmask();
+
+                if ($("#forma_contato").val() != "E-mail") {
+                    $("#contato").mask("(99) 9999?9-9999");
+
+                    $("#contato").on("blur", function() {
+                        var last = $(this).val().substr( $(this).val().indexOf("-") + 1 );
+
+                        if( last.length == 3 ) {
+                            var move = $(this).val().substr( $(this).val().indexOf("-") - 1, 1 );
+                            var lastfour = move + last;
+                            var first = $(this).val().substr( 0, 9 );
+
+                            $(this).val( first + '-' + lastfour );
+                        }
+                    });
+                }
+            })
+            
+        });    
+    </script>
+</body>
+{% endblock %}
