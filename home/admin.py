@@ -7,10 +7,8 @@ class ListandoCedentes(admin.ModelAdmin):
     search_fields = ('nome', 'contato', )
     list_per_page = 30
     ordering = ('nome',)
-    fields = ('nome', 'contato', )
-    
+    fields = ('nome', 'contato', )    
 admin.site.register(Cedente, ListandoCedentes)
-
 
 class ListandoSacados(admin.ModelAdmin):
     list_display = ('id', 'nome', 'contato')
@@ -18,10 +16,8 @@ class ListandoSacados(admin.ModelAdmin):
     search_fields = ('nome', 'contato', )
     list_per_page = 30
     ordering = ('nome',)
-    fields = ('nome', 'contato', )
-    
+    fields = ('nome', 'contato', )    
 admin.site.register(Sacado, ListandoSacados)
-
 
 class ListandoSituacoes(admin.ModelAdmin):
     list_display = ('descricao', )
@@ -29,10 +25,8 @@ class ListandoSituacoes(admin.ModelAdmin):
     search_fields = ('descricao', )
     list_per_page = 30
     ordering = ('descricao',)
-    fields = ('descricao', )
-    
+    fields = ('descricao', )    
 admin.site.register(Situacao, ListandoSituacoes)
-
 
 class ListandoFormasContato(admin.ModelAdmin):
     list_display = ('descricao', )
@@ -40,10 +34,8 @@ class ListandoFormasContato(admin.ModelAdmin):
     search_fields = ('descricao', )
     list_per_page = 30
     ordering = ('descricao',)
-    fields = ('descricao', )
-    
+    fields = ('descricao', )    
 admin.site.register(FormaContato, ListandoFormasContato)
-
 
 class ListandoTitulos(admin.ModelAdmin):
     list_display = ('cedente', 'sacado', 'valor')
@@ -52,10 +44,8 @@ class ListandoTitulos(admin.ModelAdmin):
     list_per_page = 30
     ordering = ('valor',)
     fields = ('cedente', 'sacado', 'valor', 'contato', 'pagador', 'situacao', 'forma_contato',
-        'observacao', 'data_vencimento', 'data_pagamento', 'usuario', )
-    
+        'observacao', 'data_vencimento', 'data_pagamento', 'usuario', )    
 admin.site.register(Titulo, ListandoTitulos)
-
 
 class ListandoAnexos(admin.ModelAdmin):
     list_display = ('titulo', 'descricao',)
@@ -63,10 +53,8 @@ class ListandoAnexos(admin.ModelAdmin):
     search_fields = ('titulo', 'descricao', )
     list_per_page = 30
     ordering = ('titulo', 'descricao',)
-    fields = ('titulo', 'descricao', 'arquivo' )
-    
+    fields = ('titulo', 'descricao', 'arquivo' )    
 admin.site.register(Anexo, ListandoAnexos)
-
 
 class ListandoArquivos(admin.ModelAdmin):
     list_display = ('file',)
@@ -75,5 +63,22 @@ class ListandoArquivos(admin.ModelAdmin):
     list_per_page = 30
     ordering = ('file',)
     fields = ('file',)
-    
 admin.site.register(Arquivo, ListandoArquivos)
+
+class ListandoTemplatesWhatsapp(admin.ModelAdmin):
+    list_display = ('conteudo',)
+    list_display_links = ('conteudo', )
+    search_fields = ('conteudo', )
+    list_per_page = 30
+    ordering = ('conteudo',)
+    fields = ('conteudo', )
+admin.site.register(TemplateWhatsapp, ListandoTemplatesWhatsapp)
+
+class ListandoLinks(admin.ModelAdmin):
+    list_display = ('titulo', 'link', )
+    list_display_links = ('titulo', )
+    search_fields = ('titulo', )
+    list_per_page = 30
+    ordering = ('titulo',)
+    fields = ('titulo', 'link', )
+admin.site.register(Link, ListandoLinks)

@@ -7,6 +7,7 @@ from home.views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name="home"),
+    path('login', login, name="login"),
     path('submit_login', submit_login, name="submit_login"),
     path('cadastro', cadastro, name="cadastro"),
     path('importacao', importacao, name="importacao"),

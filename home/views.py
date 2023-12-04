@@ -9,8 +9,21 @@ def home(request):
     if not 'user' in request.session:
         messages.warning(
             request, 'Efetue o login')
-        return render(request, 'login.html')
-    return render(request, 'home.html')
+        return redirect('login')
+    
+    titulos = get_titulos()
+    for titulo in titulos:
+        if titulo.forma_contato.descricao == 'Whatsapp':
+            titulo.whatsapp = get_whatsapp(titulo.sacado.nome, titulo.contato)
+
+    dados = {
+        'titulos': titulos,
+        'links': get_links()
+    }
+    return render(request, 'home.html', dados)
+
+def login(request):
+    return render(request, 'login.html')
 
 @csrf_protect
 def submit_login(request):
@@ -71,7 +84,7 @@ def submit_importacao(request):
                 dados = {
                     'cedente': items[0]
                 }
-                import_titulo(dados)
+                import_titulo(request, dados)
 
     messages.success(request, 'Dados importados com sucesso')
     return redirect('importacao')

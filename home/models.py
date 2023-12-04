@@ -13,7 +13,6 @@ class Cedente(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
-
     def __str__(self):
         return self.nome
 
@@ -25,7 +24,6 @@ class Sacado(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
-
     def __str__(self):
         return self.nome
 
@@ -40,7 +38,6 @@ class Situacao(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
-
     def __str__(self):
         return self.descricao
 
@@ -51,7 +48,6 @@ class FormaContato(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
-
     def __str__(self):
         return self.descricao
 
@@ -73,10 +69,8 @@ class Titulo(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
-
     def __str__(self):
         return f'{self.cedente} - {self.sacado} / {self.valor}'
-
 
 class Anexo(models.Model):
     class Meta:
@@ -87,7 +81,6 @@ class Anexo(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
-
     def __str__(self):
         return f'{self.titulo} - {self.created_at}'
 
@@ -98,6 +91,26 @@ class Arquivo(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
-    
     def __str__(self):
         return f'{self.file}'
+    
+class TemplateWhatsapp(models.Model):
+    class Meta:
+        db_table = 'templatewhatsapp'
+    conteudo = models.CharField(max_length=600)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+    def __str__(self):
+        return f'{self.conteudo}'
+
+class Link(models.Model):
+    class Meta:
+        db_table = 'link'
+    titulo = models.CharField(max_length=100)
+    link = models.CharField(max_length=800)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+    def __str__(self):
+        return f'{self.titulo}'
