@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import authenticate
 from .services import *
 from django.utils.dateformat import DateFormat
-from django.utils.formats import get_format
+import json
 
 def home(request):
     if not 'user' in request.session:
@@ -108,13 +108,21 @@ def pagamento(request):
 
     quantidade_pagamentos = 0
     valor_pago = 0
+    json_pagamentos = []
     for pagamento in pagamentos:
         quantidade_pagamentos += 1
         valor_pago += pagamento.valor
+        json_pagamentos.append(
+            {
+                'data': str(pagamento.data_pagamento),
+                'valor': round(float(pagamento.valor), 2)
+            }
+        )
 
     dados = {
         'pagamentos': pagamentos,
         'quantidade_pagamentos': quantidade_pagamentos,
-        'valor_pago': valor_pago
+        'valor_pago': valor_pago,
+        'json_pagamentos': json.dumps(json_pagamentos)
     }
     return render(request, 'pagamento.html', dados)
