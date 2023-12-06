@@ -62,6 +62,7 @@ def create_titulo(request, params):
             situacao=situacao,
             forma_contato=forma_contato,
             observacao=params['observacao'],
+            data_vencimento=params['data_vencimento'],
             usuario=usuario
         )
         return True
@@ -77,8 +78,21 @@ def create_arquivo(filename):
 def get_dados_titulos():
     return Titulo.objects.all()
 
+def get_dados_situacoes():
+    return Situacao.objects.all()
+
 def get_dados_template_whatsapp():
     return TemplateWhatsapp.objects.first()
 
 def get_dados_links():
     return Link.objects.all()
+
+def update_titulo(request):
+    situacao = Situacao.objects.get(descricao=request.POST['situacao'])
+    
+    titulo = Titulo.objects.get(pk=request.POST['titulo_id'])
+    titulo.situacao = situacao
+    titulo.data_pagamento = request.POST['data_pagamento']
+    titulo.data_vencimento = request.POST['data_vencimento']
+    titulo.observacao = request.POST['observacao']
+    titulo.save()

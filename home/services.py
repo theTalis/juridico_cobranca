@@ -35,6 +35,9 @@ def set_titulo(request):
     params = request.POST
     return create_titulo(request, params)
 
+def upset_titulo(request):
+    return update_titulo(request)
+
 def set_arquivo(filename):
     return create_arquivo(filename)
 
@@ -45,6 +48,9 @@ def import_titulo(dados):
 
 def get_titulos():
     return get_dados_titulos()
+
+def get_situacoes():
+    return get_dados_situacoes()
 
 def get_whatsapp(nome, telefone):
     template = get_dados_template_whatsapp()

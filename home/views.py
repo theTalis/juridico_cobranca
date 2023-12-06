@@ -3,7 +3,8 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import authenticate
 from .services import *
-from django.core.files.storage import FileSystemStorage
+from django.utils.dateformat import DateFormat
+from django.utils.formats import get_format
 
 def home(request):
     if not 'user' in request.session:
@@ -15,10 +16,17 @@ def home(request):
     for titulo in titulos:
         if titulo.forma_contato.descricao == 'Whatsapp':
             titulo.whatsapp = get_whatsapp(titulo.sacado.nome, titulo.contato)
+            if titulo.data_vencimento:
+                titulo.data_vencimento_formatada = DateFormat(titulo.data_vencimento)
+                titulo.data_vencimento_formatada = titulo.data_vencimento_formatada.format('Y-m-d')
+            if titulo.data_pagamento:
+                titulo.data_pagamento_formatada = DateFormat(titulo.data_pagamento)
+                titulo.data_pagamento_formatada = titulo.data_pagamento_formatada.format('Y-m-d')
 
     dados = {
         'titulos': titulos,
-        'links': get_links()
+        'links': get_links(),
+        'situacoes': get_situacoes()
     }
     return render(request, 'home.html', dados)
 
@@ -89,4 +97,7 @@ def submit_importacao(request):
     messages.success(request, 'Dados importados com sucesso')
     return redirect('importacao')
     
-    
+def submit_update_titulo(request):
+    upset_titulo(request)
+    messages.success(request, 'Cadastro atualizado com sucesso')
+    return redirect('home')

@@ -92,6 +92,10 @@
                     <div class="col-12 mt-3">
                         <div class="card">
                             {% comment %} <div class="card-header" style="width: 350px;">
+                                <input type="text" id="">
+                            </div> {% endcomment %}
+
+                            {% comment %} <div class="card-header" style="width: 350px;">
                                 <div>
                                     <label class="form-label" style="width: 100%;" for="intervalo">Intervalo</label>
                                     <select class="form-select" id="intervalo">
@@ -126,7 +130,7 @@
                                         {% for titulo in titulos %}
                                         <tr>
                                             <th scope="row">
-                                                <a href="#" data-bs-toggle="modal" data-bs-target="#modal_titulo">
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#modal_titulo_{{titulo.id}}">
                                                     {{forloop.counter}}
                                                 </a>
                                             </th>
@@ -156,23 +160,53 @@
             </div>
         </div>
 
-        <div class="modal" id="modal_titulo" tabindex="-1">
+        {% for titulo in titulos %}
+        <div class="modal" id="modal_titulo_{{titulo.id}}" tabindex="-1">
             <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h5 class="modal-title">Modal title</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{titulo.cedente}} - {{titulo.sacado}}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" action="{% url 'submit_update_titulo' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="titulo_id" value="{{ titulo.id }}">
+
+                            <div class="mb-3">
+                                <label class="form-label" for="situacao">Situação</label>
+                                <select id="situacao" name="situacao" class="form-select" aria-label="Situação" required>
+                                {% for situacao in situacoes %}
+                                    <option value="{{ situacao.descricao }}" {% if situacao.descricao == titulo.situacao.descricao %} selected {% endif %}>{{ situacao.descricao }}</option>
+                                {% endfor %}
+                                </select>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="data_vencimento">Data vencimento</label>
+                                    <input type="date" class="form-control" name="data_vencimento" value="{{ titulo.data_vencimento_formatada|default:'' }}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="data_pagamento">Data pagamento</label>
+                                    <input type="date" class="form-control" name="data_pagamento" value="{{ titulo.data_pagamento_formatada|default:'' }}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="observacao">Observação</label>
+                                    <textarea class="form-control" name="observacao" rows="3">{{ titulo.observacao|default:'' }}</textarea>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn me-auto" data-bs-dismiss="modal">Fechar</button>
+                                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Confirmar alterações</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="modal-body">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci animi beatae delectus deleniti dolorem eveniet facere fuga iste nemo nesciunt nihil odio perspiciatis, quia quis reprehenderit sit tempora totam unde.
-                </div>
-                <div class="modal-footer">
-                <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
-                </div>
-            </div>
             </div>
         </div>
+        {% endfor %}
     </div>    
     <script src="https://unpkg.com/@tabler/core@latest/dist/libs/apexcharts/dist/apexcharts.min.js"></script>
     <script src="https://unpkg.com/@tabler/core@latest/dist/js/tabler.min.js"></script>
