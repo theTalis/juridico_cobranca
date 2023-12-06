@@ -82,7 +82,7 @@
                             <div class="col">
                                 <!-- Page pre-title -->
                                 <h2 class="page-title">
-                                    Importação de Títulos (em desenvolvimento)
+                                    Listagem de títulos (em desenvolvimento)
                                 </h2>
                             </div>
                         </div>
@@ -92,22 +92,91 @@
             </div>
             <div class="page-body">
                 <div class="container-fluid">
-                    <form method="post" action="{% url 'submit_importacao' %}" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        {% if messages %}
-                            {% for message in messages %}
-                                <div class="alert alert-{{ message.tags }}" role="alert">
-                                    <div class="text-muted">{{ message }}</div>
-                                </div>
+                    
+                    <div class="pb-5">
+                        <div class="flex-row">
+                            {% for link in links %}
+                                <a class="border-wide p-2" href="{{ link.link }}" target="_blank">{{ link.titulo }}</a>
                             {% endfor %}
-                        {% endif %}
-                        <div class="mb-3">
-                            <input type="file" name="file" class="form-control">
                         </div>
-                        <div class="form-footer">
-                            <button type="submit" class="btn btn-primary w-100">Confirmar importação</button>
+                    </div>
+
+                    <div class="row row-deck row-cards">
+
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">Quantidade de pagamentos</div>
+                                    </div>
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="h1 mt-3 mb-4 me-2">{{ quantidade_pagamentos }}</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </form>
+
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">Valor recebido</div>
+                                    </div>
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="h1 mt-3 mb-4 me-2">R$ {{ valor_pago|floatformat:2 }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-12 mt-3">
+                        <div class="card">
+                                <table class="table card-table table-vcenter text-nowrap datatable">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Id</th>
+                                            <th scope="col">Cedente</th>
+                                            <th scope="col">Sacado</th>
+                                            <th scope="col">Valor</th>
+                                            <th scope="col">Contato</th>
+                                            <th scope="col">Forma de contato</th>
+                                            <th scope="col">Pagador</th>
+                                            <th scope="col">Situação</th>
+                                            <th scope="col">Data vencimento</th>
+                                            <th scope="col">Data pagamento</th>
+                                            <th scope="col">Observação</th>
+                                            <th scope="col">Data inclusão</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for pagamento in pagamentos %}
+                                        <tr>
+                                            <th scope="row">
+                                                {{forloop.counter}}
+                                            </th>
+                                            <td>{{ pagamento.cedente }}</td>
+                                            <td>{{ pagamento.sacado }}</td>
+                                            <td class="{{ pagamento.valor }}">R$ {{ pagamento.valor|floatformat:2 }}</td>
+                                            <td>
+                                                <a href="{{ pagamento.whatsapp }}" target="_blank">
+                                                    {{ pagamento.contato }}
+                                                </a>
+                                            </td>
+                                            <td>{{ pagamento.forma_contato }}</td>
+                                            <td>{{ pagamento.pagador }}</td>
+                                            <td>{{ pagamento.situacao }}</td>
+                                            <td>{{ pagamento.data_vencimento|default:'' }}</td>
+                                            <td>{{ pagamento.data_pagamento|default:'' }}</td>
+                                            <td>{{ pagamento.observacao|default:'' }}</td>
+                                            <td>{{ pagamento.created_at }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

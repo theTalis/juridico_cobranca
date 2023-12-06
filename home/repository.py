@@ -110,3 +110,7 @@ def update_titulo(request):
 
 def get_dados_titulo_anexos(titulo_id):
     return Anexo.objects.filter(titulo_id=titulo_id).all()
+
+def get_dados_pagamentos():
+    situacao = Situacao.objects.get(descricao='PAGO')
+    return Titulo.objects.filter(situacao=situacao).order_by('-updated_at')

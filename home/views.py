@@ -102,3 +102,19 @@ def submit_update_titulo(request):
     upset_titulo(request)
     messages.success(request, 'Cadastro atualizado com sucesso')
     return redirect('home')
+
+def pagamento(request):
+    pagamentos = get_pagamentos()
+
+    quantidade_pagamentos = 0
+    valor_pago = 0
+    for pagamento in pagamentos:
+        quantidade_pagamentos += 1
+        valor_pago += pagamento.valor
+
+    dados = {
+        'pagamentos': pagamentos,
+        'quantidade_pagamentos': quantidade_pagamentos,
+        'valor_pago': valor_pago
+    }
+    return render(request, 'pagamento.html', dados)

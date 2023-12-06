@@ -11,6 +11,7 @@ urlpatterns = [
     path('submit_login', submit_login, name="submit_login"),
     path('cadastro', cadastro, name="cadastro"),
     path('importacao', importacao, name="importacao"),
+    path('pagamento', pagamento, name="pagamento"),
     path('logout', logout, name="logout"),
 
     path('submit_cadastro', submit_cadastro, name="submit_cadastro"),
