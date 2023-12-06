@@ -169,7 +169,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form method="post" action="{% url 'submit_update_titulo' %}">
+                        <form method="post" action="{% url 'submit_update_titulo' %}" enctype="multipart/form-data">
                             {% csrf_token %}
                             <input type="hidden" name="titulo_id" value="{{ titulo.id }}">
 
@@ -194,6 +194,17 @@
                                 <div class="mb-3">
                                     <label class="form-label" for="observacao">Observação</label>
                                     <textarea class="form-control" name="observacao" rows="3">{{ titulo.observacao|default:'' }}</textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="anexo">Anexo</label>
+                                    <input type="file" name="anexo" class="form-control">
+                                </div>
+
+                                <div class="mb-3">
+                                    {% for anexo in titulo.anexos %}
+                                        <a href="media/{{ anexo.arquivo }}" target="_blank">{{ anexo.descricao }}</a>
+                                    {% endfor %}
                                 </div>
                             </div>
 

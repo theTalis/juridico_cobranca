@@ -63,3 +63,5 @@ def get_whatsapp(nome, telefone):
 def get_links():
     return get_dados_links()
 
+def get_titulo_anexos(titulo_id):
+    return get_dados_titulo_anexos(titulo_id)

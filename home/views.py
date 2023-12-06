@@ -22,6 +22,7 @@ def home(request):
             if titulo.data_pagamento:
                 titulo.data_pagamento_formatada = DateFormat(titulo.data_pagamento)
                 titulo.data_pagamento_formatada = titulo.data_pagamento_formatada.format('Y-m-d')
+        titulo.anexos = get_titulo_anexos(titulo.id)
 
     dados = {
         'titulos': titulos,

@@ -1,4 +1,5 @@
 from .models import *
+from django.core.files.storage import FileSystemStorage
 
 def get_dados_cedentes():
     try:
@@ -89,10 +90,23 @@ def get_dados_links():
 
 def update_titulo(request):
     situacao = Situacao.objects.get(descricao=request.POST['situacao'])
-    
+
     titulo = Titulo.objects.get(pk=request.POST['titulo_id'])
     titulo.situacao = situacao
     titulo.data_pagamento = request.POST['data_pagamento']
     titulo.data_vencimento = request.POST['data_vencimento']
     titulo.observacao = request.POST['observacao']
     titulo.save()
+    
+    anexo = request.FILES['anexo']
+    fs = FileSystemStorage()
+    filename = fs.save(anexo.name, anexo)
+    
+    Anexo.objects.create(
+        titulo=titulo,
+        descricao=filename,
+        arquivo=anexo
+    )
+
+def get_dados_titulo_anexos(titulo_id):
+    return Anexo.objects.filter(titulo_id=titulo_id).all()
