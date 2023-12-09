@@ -68,3 +68,9 @@ def get_titulo_anexos(titulo_id):
 
 def get_pagamentos():
     return get_dados_pagamentos()
+
+def get_cedentes():
+    return get_dados_cedentes()
+
+def get_sacados():
+    return get_dados_sacados()

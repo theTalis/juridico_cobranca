@@ -11,7 +11,14 @@ def home(request):
         messages.warning(
             request, 'Efetue o login')
         return redirect('login')
-    
+
+    search = None
+    if 'search' in request.POST:
+        search = request.POST['search']
+
+    agrupamento = []
+    filtered_titulos = []
+
     titulos = get_titulos()
     for titulo in titulos:
         if titulo.forma_contato.descricao == 'Whatsapp':
@@ -23,10 +30,21 @@ def home(request):
                 titulo.data_pagamento_formatada = DateFormat(titulo.data_pagamento)
                 titulo.data_pagamento_formatada = titulo.data_pagamento_formatada.format('Y-m-d')
         titulo.anexos = get_titulo_anexos(titulo.id)
+        
+        cedente_sacado = f'{titulo.cedente.nome} / {titulo.sacado.nome}'
+        titulo.cedente_sacado = cedente_sacado
+
+        has_value = str(search).lower() in str(titulo.cedente_sacado).lower()
+        if not search or has_value:
+            if not cedente_sacado in agrupamento:
+                agrupamento.append(cedente_sacado)
+            filtered_titulos.append(titulo)
 
     dados = {
-        'titulos': titulos,
+        'agrupamento': agrupamento,
+        'titulos': filtered_titulos,
         'links': get_links(),
+        'search': search,
         'situacoes': get_situacoes()
     }
     return render(request, 'home.html', dados)
@@ -57,6 +75,11 @@ def logout(request):
     return render(request, 'login.html')
 
 def cadastro(request):
+    if not 'user' in request.session:
+        messages.warning(
+            request, 'Efetue o login')
+        return redirect('login')
+
     params = {
         "cedentes": get_cedentes(),
         "sacados": get_sacados(),
@@ -66,6 +89,11 @@ def cadastro(request):
     return render(request, 'cadastro.html', params)
 
 def importacao(request):
+    if not 'user' in request.session:
+        messages.warning(
+            request, 'Efetue o login')
+        return redirect('login')
+
     return render(request, 'importacao.html')
 
 def submit_cadastro(request):
@@ -104,25 +132,22 @@ def submit_update_titulo(request):
     return redirect('home')
 
 def pagamento(request):
+    if not 'user' in request.session:
+        messages.warning(
+            request, 'Efetue o login')
+        return redirect('login')
+
     pagamentos = get_pagamentos()
 
     quantidade_pagamentos = 0
     valor_pago = 0
-    json_pagamentos = []
     for pagamento in pagamentos:
         quantidade_pagamentos += 1
         valor_pago += pagamento.valor
-        json_pagamentos.append(
-            {
-                'data': str(pagamento.data_pagamento),
-                'valor': round(float(pagamento.valor), 2)
-            }
-        )
 
     dados = {
         'pagamentos': pagamentos,
         'quantidade_pagamentos': quantidade_pagamentos,
-        'valor_pago': valor_pago,
-        'json_pagamentos': json.dumps(json_pagamentos)
+        'valor_pago': valor_pago
     }
     return render(request, 'pagamento.html', dados)

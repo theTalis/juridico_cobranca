@@ -103,30 +103,20 @@
                     
                     <div class="col-12 mt-3">
                         <div class="card">
-                            {% comment %} <div class="card-header" style="width: 350px;">
-                                <input type="text" id="">
-                            </div> {% endcomment %}
-
-                            {% comment %} <div class="card-header" style="width: 350px;">
-                                <div>
-                                    <label class="form-label" style="width: 100%;" for="intervalo">Intervalo</label>
-                                    <select class="form-select" id="intervalo">
-                                        <option value="5">Últimos 5 dias</option>
-                                        <option value="15">Últimos 15 dias</option>
-                                        <option value="30">Últimos 30 dias</option>
-                                        <option value="60">Últimos 60 dias</option>
-                                        <option value="90">Últimos 90 dias</option>
-                                    </select>
-                                </div>
-                            </div> {% endcomment %}
+                            <div class="card-header" style="width: 350px;">
+                                <form method="post" action="{% url 'home' %}">
+                                    {% csrf_token %}
+                                    <input type="text" name="search" value="{{ search|default:'' }}">
+                                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Pesquisar</button>
+                                </form>
+                            </div>
 
                             <div class="table-responsive" style="height: 350px">
                                 <table class="table card-table table-vcenter text-nowrap datatable">
                                     <thead>
                                         <tr>
+                                            <th scope="col">Cedente / Sacado</th>
                                             <th scope="col">Id</th>
-                                            <th scope="col">Cedente</th>
-                                            <th scope="col">Sacado</th>
                                             <th scope="col">Valor</th>
                                             <th scope="col">Contato</th>
                                             <th scope="col">Forma de contato</th>
@@ -138,16 +128,23 @@
                                             <th scope="col">Data inclusão</th>
                                         </tr>
                                     </thead>
+
                                     <tbody>
-                                        {% for titulo in titulos %}
+                                        {% for cedente_sacado in agrupamento %}
                                         <tr>
+                                            <td>{{ cedente_sacado }}</td>
+                                        </tr>
+
+                                        {% for titulo in titulos %}
+                                            
+                                        {% if titulo.cedente_sacado == cedente_sacado %}
+                                        <tr>
+                                            <td></td>
                                             <th scope="row">
                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#modal_titulo_{{titulo.id}}">
                                                     {{forloop.counter}}
                                                 </a>
                                             </th>
-                                            <td>{{ titulo.cedente }}</td>
-                                            <td>{{ titulo.sacado }}</td>
                                             <td class="{{ titulo.valor }}">R$ {{ titulo.valor|floatformat:2 }}</td>
                                             <td>
                                                 <a href="{{ titulo.whatsapp }}" target="_blank">
@@ -162,6 +159,10 @@
                                             <td>{{ titulo.observacao|default:'' }}</td>
                                             <td>{{ titulo.created_at }}</td>
                                         </tr>
+                                        {% endif %}
+                                        
+                                        {% endfor %}
+                                        
                                         {% endfor %}
                                     </tbody>
                                 </table>
@@ -231,7 +232,6 @@
         </div>
         {% endfor %}
     </div>    
-    <script src="https://unpkg.com/@tabler/core@latest/dist/libs/apexcharts/dist/apexcharts.min.js"></script>
     <script src="https://unpkg.com/@tabler/core@latest/dist/js/tabler.min.js"></script>
 </body>
 {% endblock %}
