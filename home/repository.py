@@ -16,6 +16,12 @@ def get_dados_sacados():
 def get_dados_pagadores():
     return Pagador.choices
 
+def get_dados_tipos_titulo():
+    return TipoTitulo.choices
+
+def get_dados_origens():
+    return Origem.choices
+
 def get_dados_formas_contato():
     try:
         return FormaContato.objects.all()
@@ -57,6 +63,7 @@ def create_titulo(request, params):
         Titulo.objects.create(
             cedente=cedente,
             sacado=sacado,
+            cpf_cnpj=params['cpf_cnpj'],
             valor=params['valor'],
             contato=params['contato'],
             pagador=params['pagador'],
@@ -64,6 +71,8 @@ def create_titulo(request, params):
             forma_contato=forma_contato,
             observacao=params['observacao'],
             data_vencimento=params['data_vencimento'],
+            tipo=params['tipo'],
+            origem=params['origem'],
             usuario=usuario
         )
         return True
@@ -76,8 +85,8 @@ def create_arquivo(filename):
         file=filename
     )
 
-def get_dados_titulos():
-    return Titulo.objects.all()
+def get_dados_titulos_em_aberto():
+    return Titulo.objects.filter(data_pagamento=None).order_by("cedente__nome", "sacado__nome").all()
 
 def get_dados_situacoes():
     return Situacao.objects.all()
@@ -91,22 +100,34 @@ def get_dados_links():
 def update_titulo(request):
     situacao = Situacao.objects.get(descricao=request.POST['situacao'])
 
+    try:
+        forma_contato = FormaContato.objects.get(descricao=request.POST['forma_contato'])
+    except FormaContato.DoesNotExist:
+        forma_contato = FormaContato.objects.create(
+            descricao=request.POST['forma_contato']
+        )
+
     titulo = Titulo.objects.get(pk=request.POST['titulo_id'])
     titulo.situacao = situacao
-    titulo.data_pagamento = request.POST['data_pagamento']
-    titulo.data_vencimento = request.POST['data_vencimento']
+    titulo.forma_contato = forma_contato
+    titulo.contato = request.POST['contato']
+    if len(request.POST['data_pagamento']) > 0:
+        titulo.data_pagamento = request.POST['data_pagamento']
+    if len(request.POST['data_vencimento']) > 0:
+        titulo.data_vencimento = request.POST['data_vencimento']
     titulo.observacao = request.POST['observacao']
     titulo.save()
     
-    anexo = request.FILES['anexo']
-    fs = FileSystemStorage()
-    filename = fs.save(anexo.name, anexo)
-    
-    Anexo.objects.create(
-        titulo=titulo,
-        descricao=filename,
-        arquivo=anexo
-    )
+    if "anexo" in request.FILES :
+        anexo = request.FILES['anexo']
+        fs = FileSystemStorage()
+        filename = fs.save(anexo.name, anexo)
+        
+        Anexo.objects.create(
+            titulo=titulo,
+            descricao=filename,
+            arquivo=anexo
+        )
 
 def get_dados_titulo_anexos(titulo_id):
     return Anexo.objects.filter(titulo_id=titulo_id).all()

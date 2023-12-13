@@ -82,7 +82,7 @@
                             <div class="col">
                                 <!-- Page pre-title -->
                                 <h2 class="page-title">
-                                    Importação de Títulos (em desenvolvimento)
+                                    Importação de Títulos
                                 </h2>
                             </div>
                         </div>
@@ -91,7 +91,7 @@
                 </div>
             </div>
             <div class="page-body">
-                <div class="container-fluid">
+                <div class="container-fluid col-12">
                     <form method="post" action="{% url 'submit_importacao' %}" enctype="multipart/form-data">
                         {% csrf_token %}
                         {% if messages %}
@@ -101,10 +101,16 @@
                                 </div>
                             {% endfor %}
                         {% endif %}
-                        <div class="mb-3">
+                        <div class="mb-3 col-3">
+                            <label class="form-label" for="cedente">Cedente</label>
+                            <input type="text" class="form-control" name="cedente">
+                        </div>
+
+                        <div class="mb-3 col-3">
                             <input type="file" name="file" class="form-control">
                         </div>
-                        <div class="form-footer">
+                        
+                        <div class="form-footer col-3">
                             <button type="submit" class="btn btn-primary w-100">Confirmar importação</button>
                         </div>
                     </form>

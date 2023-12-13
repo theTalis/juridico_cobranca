@@ -12,14 +12,22 @@ def home(request):
             request, 'Efetue o login')
         return redirect('login')
 
-    search = None
+    search = ''
     if 'search' in request.POST:
         search = request.POST['search']
+
+    valor_filtro = ''
+    if 'valor_filtro' in request.POST:
+        valor_filtro = request.POST['valor_filtro']
+
+    situacao_filtro = ''
+    if 'situacao_filtro' in request.POST:
+        situacao_filtro = request.POST['situacao_filtro']
 
     agrupamento = []
     filtered_titulos = []
 
-    titulos = get_titulos()
+    titulos = get_titulos_em_aberto()
     for titulo in titulos:
         if titulo.forma_contato.descricao == 'Whatsapp':
             titulo.whatsapp = get_whatsapp(titulo.sacado.nome, titulo.contato)
@@ -31,11 +39,18 @@ def home(request):
                 titulo.data_pagamento_formatada = titulo.data_pagamento_formatada.format('Y-m-d')
         titulo.anexos = get_titulo_anexos(titulo.id)
         
-        cedente_sacado = f'{titulo.cedente.nome} / {titulo.sacado.nome}'
+        cpf_cnpj = ''
+        if titulo.cpf_cnpj:
+            cpf_cnpj = f'- {titulo.cpf_cnpj}'
+
+        cedente_sacado = f'{titulo.cedente.nome} / {titulo.sacado.nome} {cpf_cnpj}'
         titulo.cedente_sacado = cedente_sacado
 
-        has_value = str(search).lower() in str(titulo.cedente_sacado).lower()
-        if not search or has_value:
+        has_value = len(search) > 0 and str(search).lower() in str(titulo.cedente_sacado).lower()
+        has_valor_filtro = len(valor_filtro) > 0 and float(valor_filtro) == float(titulo.valor)
+        has_situacao_filtro = len(situacao_filtro) > 0 and situacao_filtro == titulo.situacao.descricao
+
+        if (not search or has_value) and (not valor_filtro or has_valor_filtro) and (not situacao_filtro or has_situacao_filtro):
             if not cedente_sacado in agrupamento:
                 agrupamento.append(cedente_sacado)
             filtered_titulos.append(titulo)
@@ -45,7 +60,10 @@ def home(request):
         'titulos': filtered_titulos,
         'links': get_links(),
         'search': search,
-        'situacoes': get_situacoes()
+        'valor_filtro': valor_filtro,
+        'situacao_filtro': situacao_filtro,
+        'situacoes': get_situacoes(),
+        "formas_contato": get_formas_contato()
     }
     return render(request, 'home.html', dados)
 
@@ -84,6 +102,8 @@ def cadastro(request):
         "cedentes": get_cedentes(),
         "sacados": get_sacados(),
         "pagadores": get_pagadores(),
+        "tipos_titulo": get_tipos_titulo(),
+        "origens": get_origens(),
         "formas_contato": get_formas_contato()
     }
     return render(request, 'cadastro.html', params)

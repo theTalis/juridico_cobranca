@@ -103,22 +103,18 @@
                             {% endif %}
                             <div class="mb-3">
                                 <label class="form-label" for="cedente">Cedente</label>
-                                {% comment %} <select name="cedente" class="form-select" aria-label="Cedente">
-                                {% for cedente in cedentes %}
-                                    <option value="{{ cedente.id }}">{{ cedente.nome }}</option>
-                                {% endfor %}
-                                </select> {% endcomment %}
                                 <input type="text" class="form-control" name="cedente" required>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label" for="sacado">Sacado</label>
-                                {% comment %} <select name="cedente" class="form-select" aria-label="Cedente">
-                                {% for cedente in cedentes %}
-                                    <option value="{{ cedente.id }}">{{ cedente.nome }}</option>
-                                {% endfor %}
-                                </select> {% endcomment %}
                                 <input type="text" class="form-control" name="sacado" required>
                             </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="cpf_cnpj">CPF/CNPJ</label>
+                                <input type="text" class="form-control" name="cpf_cnpj">
+                            </div>
+
                             <div class="mb-3">
                                 <label class="form-label" for="valor">Valor</label>
                                 <input type="text" class="form-control" id="valor" name="valor" placeholder="Ex: R$ 0,00" required>
@@ -155,6 +151,26 @@
                             </div>
 
                             <div class="mb-3">
+                                <label class="form-label" for="tipo">Tipo do título</label>
+                                <select name="tipo" class="form-select" aria-label="Tipo do título" required>
+                                <option value="">Selecione o Tipo do título</option>
+                                {% for value, text  in tipos_titulo %}
+                                    <option value="{{ value }}">{{ text }}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="origem">Origem</label>
+                                <select name="origem" class="form-select" aria-label="Origem" required>
+                                <option value="">Selecione a origem</option>
+                                {% for value, text  in origens %}
+                                    <option value="{{ value }}">{{ text }}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
                                 <label class="form-label" for="observacao">Observação</label>
                                 <textarea class="form-control" name="observacao" rows="3"></textarea>
                             </div>
@@ -168,7 +184,6 @@
         </div>
     </div>    
     <script src="https://unpkg.com/@tabler/core@latest/dist/js/tabler.min.js"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.5/jquery.inputmask.min.js" integrity="sha512-sR3EKGp4SG8zs7B0MEUxDeq8rw9wsuGVYNfbbO/GLCJ59LBE4baEfQBVsP2Y/h2n8M19YV1mujFANO1yA3ko7Q==" crossorigin="anonymous"></script>
     <script>
         $(document).ready(function(){

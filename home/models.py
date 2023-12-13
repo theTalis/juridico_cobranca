@@ -30,6 +30,15 @@ class Sacado(models.Model):
 class Pagador(models.TextChoices):
     CEDENTE = 'CEDENTE', _('Cedente')
     SACADO = 'SACADO', _('Sacado')
+    CEDENTE_SACADO = 'CEDENTE_SACADO', _('Cedente/Sacado')
+
+class TipoTitulo(models.TextChoices):
+    DUPLICATA = 'DUPLICATA', _('Duplicata')
+    CHEQUE = 'CHEQUE', _('Cheque')
+
+class Origem(models.TextChoices):
+    SEC = 'SEC', _('Secutirizadora')
+    FIDC = 'FIDC', _('Fidc')
 
 class Situacao(models.Model):
     class Meta:
@@ -57,13 +66,17 @@ class Titulo(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, null=False, blank=True)
     cedente = models.ForeignKey(Cedente, on_delete=models.CASCADE)
     sacado = models.ForeignKey(Sacado, on_delete=models.CASCADE)
+    cpf_cnpj = models.CharField(max_length=30, null=True, blank=True)
     valor = models.FloatField(null=True, blank=True)
     contato = models.CharField(max_length=100, null=True, blank=True)
-    pagador = models.CharField(choices=Pagador.choices, default=Pagador.CEDENTE, max_length=10, null=True, blank=True)
+    pagador = models.CharField(choices=Pagador.choices, default=Pagador.CEDENTE, max_length=20, null=True, blank=True)
     situacao = models.ForeignKey(Situacao, on_delete=models.CASCADE, null=True, blank=True)
     forma_contato = models.ForeignKey(FormaContato, on_delete=models.CASCADE, null=True, blank=True)
     data_vencimento = models.DateField(null=True, blank=True)
+    data_protesto = models.DateField(null=True, blank=True)
     data_pagamento = models.DateField(null=True, blank=True)
+    tipo = models.CharField(choices=TipoTitulo.choices, default=TipoTitulo.DUPLICATA, max_length=20, null=True, blank=True)
+    origem = models.CharField(choices=Origem.choices, default=Origem.SEC, max_length=20, null=True, blank=True)
     observacao = models.TextField(null=True, blank=True)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)

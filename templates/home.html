@@ -82,7 +82,7 @@
                             <div class="col">
                                 <!-- Page pre-title -->
                                 <h2 class="page-title">
-                                    Listagem de títulos (em desenvolvimento)
+                                    Listagem de títulos Em Aberto
                                 </h2>
                             </div>
                         </div>
@@ -101,16 +101,39 @@
                         </div>
                     </div>
                     
+                    <div class="flex">
+                        <form method="post" action="{% url 'home' %}">
+                            {% csrf_token %}
+                            <div class="row col-12 p-2">
+                                <div class="col-2 p-2">
+                                    <label class="form-label" for="search">Nome</label>
+                                    <input type="text" class="form-control" name="search" value="{{ search|default:'' }}">
+                                </div>
+                                
+                                <div class="col-2 p-2">
+                                    <label class="form-label" for="situacao_filtro">Situação</label>
+                                    <select id="situacao" name="situacao_filtro" class="form-select" aria-label="Situação">
+                                    <option value="">Todas</option>
+                                    {% for situacao in situacoes %}
+                                        <option value="{{ situacao.descricao }}" {% if situacao.descricao == situacao_filtro.descricao %} selected {% endif %}>{{ situacao.descricao }}</option>
+                                    {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="col-2 p-2">
+                                    <label class="form-label" for="valor_filtro">Valor</label>
+                                    <input type="number" class="form-control" name="valor_filtro" value="{{ valor_filtro|default:'' }}">
+                                </div>
+
+                                <div class="col-2 p-5">
+                                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Pesquisar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
                     <div class="col-12 mt-3">
                         <div class="card">
-                            <div class="card-header" style="width: 350px;">
-                                <form method="post" action="{% url 'home' %}">
-                                    {% csrf_token %}
-                                    <input type="text" name="search" value="{{ search|default:'' }}">
-                                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Pesquisar</button>
-                                </form>
-                            </div>
-
                             <div class="table-responsive" style="height: 350px">
                                 <table class="table card-table table-vcenter text-nowrap datatable">
                                     <thead>
@@ -125,6 +148,8 @@
                                             <th scope="col">Data vencimento</th>
                                             <th scope="col">Data pagamento</th>
                                             <th scope="col">Observação</th>
+                                            <th scope="col">Tipo</th>
+                                            <th scope="col">Origem</th>
                                             <th scope="col">Data inclusão</th>
                                         </tr>
                                     </thead>
@@ -157,6 +182,8 @@
                                             <td>{{ titulo.data_vencimento|default:'' }}</td>
                                             <td>{{ titulo.data_pagamento|default:'' }}</td>
                                             <td>{{ titulo.observacao|default:'' }}</td>
+                                            <td>{{ titulo.tipo }}</td>
+                                            <td>{{ titulo.origem }}</td>
                                             <td>{{ titulo.created_at }}</td>
                                         </tr>
                                         {% endif %}
@@ -193,6 +220,21 @@
                                     <option value="{{ situacao.descricao }}" {% if situacao.descricao == titulo.situacao.descricao %} selected {% endif %}>{{ situacao.descricao }}</option>
                                 {% endfor %}
                                 </select>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="forma_contato">Forma contato</label>
+                                    <select id="forma_contato" name="forma_contato" class="form-select" aria-label="Forma contato" required>
+                                    <option value="">Selecione a forma de contato</option>
+                                    {% for forma_contato in formas_contato %}
+                                        <option value="{{ forma_contato.descricao }}" {% if forma_contato.descricao == titulo.forma_contato.descricao %} selected {% endif %}>{{ forma_contato.descricao }}</option>
+                                    {% endfor %}
+                                    </select>
+                                </div>
+    
+                                <div class="mb-3">
+                                    <label class="form-label" for="contato">Contato</label>
+                                    <input type="text" class="form-control" id="contato" name="contato" value="{{ titulo.contato }}">
+                                </div>
 
                                 <div class="mb-3">
                                     <label class="form-label" for="data_vencimento">Data vencimento</label>
@@ -233,5 +275,27 @@
         {% endfor %}
     </div>    
     <script src="https://unpkg.com/@tabler/core@latest/dist/js/tabler.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.5/jquery.inputmask.min.js" integrity="sha512-sR3EKGp4SG8zs7B0MEUxDeq8rw9wsuGVYNfbbO/GLCJ59LBE4baEfQBVsP2Y/h2n8M19YV1mujFANO1yA3ko7Q==" crossorigin="anonymous"></script>
+    <script>
+        $("#forma_contato").on("change", function() {
+            $("#contato").unmask();
+
+            if ($("#forma_contato").val() != "E-mail") {
+                $("#contato").mask("(99) 9999?9-9999");
+
+                $("#contato").on("blur", function() {
+                    var last = $(this).val().substr( $(this).val().indexOf("-") + 1 );
+
+                    if( last.length == 3 ) {
+                        var move = $(this).val().substr( $(this).val().indexOf("-") - 1, 1 );
+                        var lastfour = move + last;
+                        var first = $(this).val().substr( 0, 9 );
+
+                        $(this).val( first + '-' + lastfour );
+                    }
+                });
+            }
+        })
+    </script>
 </body>
 {% endblock %}

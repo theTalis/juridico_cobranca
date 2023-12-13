@@ -11,6 +11,12 @@ def get_sacados():
 def get_pagadores():
     return get_dados_pagadores()
 
+def get_tipos_titulo():
+    return get_dados_tipos_titulo()
+
+def get_origens():
+    return get_dados_origens()
+
 def get_formas_contato():
     return get_dados_formas_contato()
 
@@ -46,8 +52,8 @@ def import_titulo(dados):
     return {}
     # return create_titulo(request, dados)
 
-def get_titulos():
-    return get_dados_titulos()
+def get_titulos_em_aberto():
+    return get_dados_titulos_em_aberto()
 
 def get_situacoes():
     return get_dados_situacoes()

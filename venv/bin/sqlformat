@@ -1,4 +1,4 @@
-#!/Users/tec-talis/code/projeto_pessoal/juridico_cobranca/venv/bin/python
+#!/Users/tec-talis/code/projeto_pessoal/juridico_cobranca/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
