@@ -10,5 +10,3 @@ env/
 venv/
 .DS_Store
 apps/.DS_Store
-
-db.sqlite3 
