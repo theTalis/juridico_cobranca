@@ -47,10 +47,8 @@ def upset_titulo(request):
 def set_arquivo(filename):
     return create_arquivo(filename)
 
-def import_titulo(dados):
-    print(dados)
-    return {}
-    # return create_titulo(request, dados)
+def import_titulo(request, dados):
+    return create_titulo(request, dados)
 
 def get_titulos_em_aberto():
     return get_dados_titulos_em_aberto()

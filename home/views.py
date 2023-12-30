@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import authenticate
 from .services import *
 from django.utils.dateformat import DateFormat
-import json
+from datetime import datetime
 
 def home(request):
     if not 'user' in request.session:
@@ -131,6 +131,10 @@ def submit_cadastro(request):
     return redirect('cadastro')
 
 def submit_importacao(request):
+    cedente = ''
+    if 'cedente' in request.POST:
+        cedente = request.POST['cedente']
+
     if request.method == 'POST' and request.FILES['file']:
         file = request.FILES['file']
         content = file.read()
@@ -142,9 +146,40 @@ def submit_importacao(request):
             line = str(line)
             items = line.split(',')
 
-            if len(items[4]) > 0:
+            if len(items[3]) > 0:
+                tipo = ''
+                if items[10] == 'DP':
+                    tipo = 'DUPLICATA'
+                elif items[10] == 'CQ':
+                    tipo = 'CHEQUE'
+
+                data_vencimento = ''
+                if (len(items[0]) > 0):
+                    data_vencimento = str(items[0]).replace('b', '').replace("'", '')
+                    data_vencimento = datetime.strptime(data_vencimento, "%d/%m/%Y").strftime("%Y-%m-%d")
+
+                data_protesto = ''
+                if (len(items[19]) > 0):
+                    data_protesto = str(items[19]).replace('b', '').replace("'", '')
+                    data_protesto = datetime.strptime(data_protesto, "%d/%m/%Y").strftime("%Y-%m-%d")
+
+                valor = 0
+                if (len(items[12]) > 0):
+                    valor = str(items[12]).replace('b', '').replace('"', '')
+                    valor = float(valor)
+                
                 dados = {
-                    'cedente': items[0]
+                    'cedente': cedente,
+                    'data_vencimento': data_vencimento,
+                    'cpf_cnpj': items[2],
+                    'sacado': items[3],
+                    'tipo': tipo, 
+                    'contato': items[8], 
+                    'valor': valor, 
+                    'data_protesto': data_protesto,
+                    'origem': items[23],
+                    'forma_contato': 'WHATSAPP',
+                    'pagador': 'SACADO'
                 }
                 import_titulo(request, dados)
 
