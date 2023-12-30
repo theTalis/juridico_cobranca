@@ -117,12 +117,25 @@
             <div class="page-body">
                 <div class="container-fluid">
                     
-                    <div class="pb-5">
-                        <div class="flex-row">
-                            {% for link in links %}
-                                <a class="border-wide p-2" href="{{ link.link }}" target="_blank">{{ link.titulo }}</a>
-                            {% endfor %}
-                        </div>
+                    <div class="flex pb-2">
+                        <form method="post" action="{% url 'acordo' %}">
+                            {% csrf_token %}
+                            <div class="row col-12 p-2">
+                                <div class="col-2 p-2">
+                                    <label class="form-label" for="data_inicial">Data inicial</label>
+                                    <input type="date" class="form-control" name="data_inicial" value="{{ data_inicial|default:'' }}">
+                                </div>
+
+                                <div class="col-2 p-2">
+                                    <label class="form-label" for="data_final">Data final</label>
+                                    <input type="date" class="form-control" name="data_final" value="{{ data_final|default:'' }}">
+                                </div>
+                                
+                                <div class="col-2 p-5">
+                                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Filtrar</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                     
                     <div class="col-12 mt-3">

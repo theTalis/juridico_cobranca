@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import authenticate
 from .services import *
 from django.utils.dateformat import DateFormat
-from datetime import datetime
+from datetime import datetime, timedelta
 
 def home(request):
     if not 'user' in request.session:
@@ -202,7 +202,17 @@ def pagamento(request):
             request, 'Efetue o login')
         return redirect('login')
 
-    pagamentos = get_pagamentos()
+    data_atual = datetime.today()
+    
+    data_inicial = str(data_atual - timedelta(days=7))[0:10]
+    if 'data_inicial' in request.POST:
+        data_inicial = request.POST['data_inicial']
+
+    data_final = str(data_atual + timedelta(days=7))[0:10]
+    if 'data_final' in request.POST:
+        data_final = request.POST['data_final']
+
+    pagamentos = get_pagamentos(data_inicial, data_final)
 
     quantidade_pagamentos = 0
     valor_pago = 0
@@ -213,7 +223,9 @@ def pagamento(request):
     dados = {
         'pagamentos': pagamentos,
         'quantidade_pagamentos': quantidade_pagamentos,
-        'valor_pago': valor_pago
+        'valor_pago': valor_pago,
+        'data_inicial': data_inicial,
+        'data_final': data_final,
     }
     return render(request, 'pagamento.html', dados)
 
@@ -223,9 +235,21 @@ def acordo(request):
             request, 'Efetue o login')
         return redirect('login')
 
-    acordos = get_acordos()
+    data_atual = datetime.today()
+    
+    data_inicial = str(data_atual - timedelta(days=7))[0:10]
+    if 'data_inicial' in request.POST:
+        data_inicial = request.POST['data_inicial']
+
+    data_final = str(data_atual + timedelta(days=7))[0:10]
+    if 'data_final' in request.POST:
+        data_final = request.POST['data_final']
+
+    acordos = get_acordos(data_inicial, data_final)
     dados = {
-        'acordos': acordos
+        'acordos': acordos,
+        'data_inicial': data_inicial,
+        'data_final': data_final
     }
     return render(request, 'acordo.html', dados)
 
@@ -235,9 +259,21 @@ def juridico_externo(request):
             request, 'Efetue o login')
         return redirect('login')
 
-    juridico_externo = get_juridico_externo()
+    data_atual = datetime.today()
+    
+    data_inicial = str(data_atual - timedelta(days=7))[0:10]
+    if 'data_inicial' in request.POST:
+        data_inicial = request.POST['data_inicial']
+
+    data_final = str(data_atual + timedelta(days=7))[0:10]
+    if 'data_final' in request.POST:
+        data_final = request.POST['data_final']
+
+    juridico_externo = get_juridico_externo(data_inicial, data_final)
 
     dados = {
-        'titulos': juridico_externo
+        'titulos': juridico_externo,
+        'data_inicial': data_inicial,
+        'data_final': data_final
     }
     return render(request, 'juridico_externo.html', dados)

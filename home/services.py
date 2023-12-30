@@ -76,14 +76,14 @@ def get_titulo_anexos(titulo_id):
 def get_titulo_observacoes(titulo_id):
     return get_dados_titulo_observacoes(titulo_id)
 
-def get_pagamentos():
-    return get_dados_pagamentos()
+def get_pagamentos(data_inicial, data_final):
+    return get_dados_pagamentos(data_inicial, data_final)
 
-def get_acordos():
-    return get_dados_acordos()
+def get_acordos(data_inicial, data_final):
+    return get_dados_acordos(data_inicial, data_final)
 
-def get_juridico_externo():
-    return get_dados_juridico_externo()
+def get_juridico_externo(data_inicial, data_final):
+    return get_dados_juridico_externo(data_inicial, data_final)
 
 def get_cedentes():
     return get_dados_cedentes()
