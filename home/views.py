@@ -192,7 +192,7 @@ def submit_update_titulo(request):
     return redirect('home')
 
 def submit_update_observacoes(request):
-    # upset_titulo(request)
+    upset_observacoes(request)
     messages.success(request, 'Cadastro atualizado com sucesso')
     return redirect('home')
 

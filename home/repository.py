@@ -115,14 +115,6 @@ def update_titulo(request):
     if len(request.POST['data_vencimento']) > 0:
         titulo.data_vencimento = request.POST['data_vencimento']
     titulo.save()
-
-    if "observacao" in request.POST:
-        observacao = request.POST['observacao']
-        
-        Observacao.objects.create(
-            titulo=titulo,
-            descricao=observacao
-        )
     
     if "anexo" in request.FILES:
         anexo = request.FILES['anexo']
@@ -134,6 +126,26 @@ def update_titulo(request):
             descricao=filename,
             arquivo=anexo
         )
+
+def update_observacoes(request):
+    titulo = Titulo.objects.get(pk=request.POST['titulo_id'])
+
+    observacoes = Observacao.objects.filter(titulo_id=titulo.id).all()
+    
+    if "observacao" in request.POST and len(request.POST['observacao']) > 0:
+        descricao = request.POST['observacao']
+        Observacao.objects.create(
+            titulo=titulo,
+            descricao=descricao
+        )
+
+    for observacao in observacoes:
+        if f'observacao_{observacao.id}' in request.POST:
+            if len(request.POST[f'observacao_{observacao.id}']) == 0:
+                observacao.delete()
+            else:
+                observacao.descricao = request.POST[f'observacao_{observacao.id}']
+                observacao.save()
 
 def get_dados_titulo_anexos(titulo_id):
     return Anexo.objects.filter(titulo_id=titulo_id).all()

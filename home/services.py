@@ -44,6 +44,9 @@ def set_titulo(request):
 def upset_titulo(request):
     return update_titulo(request)
 
+def upset_observacoes(request):
+    return update_observacoes(request)
+
 def set_arquivo(filename):
     return create_arquivo(filename)
 

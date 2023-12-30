@@ -252,17 +252,17 @@
                             <div class="card-header">
                                 <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" role="tablist">
                                     <li class="nav-item" role="presentation">
-                                        <a href="#tabs-titulo" class="nav-link active" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">Home</a>
+                                        <a href="#tabs-titulo_{{titulo.id}}" class="nav-link active" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">Título</a>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <a href="#tabs-observacoes" class="nav-link" data-bs-toggle="tab" aria-selected="true" role="tab">Profile</a>
+                                        <a href="#tabs-observacoes_{{titulo.id}}" class="nav-link" data-bs-toggle="tab" aria-selected="true" role="tab">Observações</a>
                                     </li>
                                 </ul>
                             </div>
 
                             <div class="card-body">
                                 <div class="tab-content">
-                                    <div class="tab-pane active show" id="tabs-titulo" role="tabpanel">
+                                    <div class="tab-pane active show" id="tabs-titulo_{{titulo.id}}" role="tabpanel">
                                         <form method="post" action="{% url 'submit_update_titulo' %}" enctype="multipart/form-data">
                                             {% csrf_token %}
                                             <input type="hidden" name="titulo_id" value="{{ titulo.id }}">
@@ -319,27 +319,26 @@
                                         </form>
                                     </div>
 
-                                    <div class="tab-pane" id="tabs-observacoes" role="tabpanel">
+                                    <div class="tab-pane" id="tabs-observacoes_{{titulo.id}}" role="tabpanel">
                                         <form method="post" action="{% url 'submit_update_observacoes' %}" enctype="multipart/form-data">
                                             {% csrf_token %}
                                             <input type="hidden" name="titulo_id" value="{{ titulo.id }}">
 
                                             <div class="mb-3">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="observacao">Observações</label>
-                                                    <textarea class="form-control" name="observacao" rows="3"></textarea>
+                                                    <textarea class="form-control" name="observacao" rows="3" placeholder="Inclua uma nova observação"></textarea>
                                                 </div>
 
                                                 <div class="mb-3">
                                                     {% for observacao in titulo.observacoes %}
-                                                        <textarea class="form-control" disabled>{{ observacao.descricao }}</textarea>
+                                                        <textarea class="form-control mb-2" name="observacao_{{ observacao.id }}">{{ observacao.descricao }}</textarea>
                                                     {% endfor %}
                                                 </div>
                                             </div>
 
                                             <div class="modal-footer">
                                                 <button type="button" class="btn me-auto" data-bs-dismiss="modal">Fechar</button>
-                                                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Confirmar alterações</button>
+                                                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Confirmar observações</button>
                                             </div>
                                         </form>
                                     </div>
