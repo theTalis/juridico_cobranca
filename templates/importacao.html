@@ -128,7 +128,13 @@
                         {% endif %}
                         <div class="mb-3 col-3">
                             <label class="form-label" for="cedente">Cedente</label>
-                            <input type="text" class="form-control" name="cedente">
+                            
+                            <input name="cedente" class="form-control" list="datalistOptions" placeholder="Selecione o cedente..." required>
+                            <datalist id="datalistOptions">
+                                {% for cedente in cedentes %}
+                                    <option value="{{ cedente.nome }}">{{ cedente.nome }}</option>
+                                {% endfor %}
+                            </datalist>
                         </div>
 
                         <div class="mb-3 col-3">

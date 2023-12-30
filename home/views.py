@@ -119,7 +119,10 @@ def importacao(request):
             request, 'Efetue o login')
         return redirect('login')
 
-    return render(request, 'importacao.html')
+    params = {
+        "cedentes": get_cedentes(),
+    }
+    return render(request, 'importacao.html', params)
 
 def submit_cadastro(request):
     erros_cadastro = get_erros_cadastro(request)
