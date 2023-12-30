@@ -72,6 +72,9 @@ def get_links():
 def get_titulo_anexos(titulo_id):
     return get_dados_titulo_anexos(titulo_id)
 
+def get_titulo_observacoes(titulo_id):
+    return get_dados_titulo_observacoes(titulo_id)
+
 def get_pagamentos():
     return get_dados_pagamentos()
 

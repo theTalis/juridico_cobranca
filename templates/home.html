@@ -134,7 +134,7 @@
 
                     <div class="col-12 mt-3">
                         <div class="card">
-                            <div class="table-responsive" style="height: 350px">
+                            <div class="table-responsive">
                                 <table class="table card-table table-vcenter text-nowrap datatable">
                                     <thead>
                                         <tr>
@@ -147,7 +147,6 @@
                                             <th scope="col">Situação</th>
                                             <th scope="col">Data vencimento</th>
                                             <th scope="col">Data pagamento</th>
-                                            <th scope="col">Observação</th>
                                             <th scope="col">Tipo</th>
                                             <th scope="col">Origem</th>
                                             <th scope="col">Data inclusão</th>
@@ -155,15 +154,23 @@
                                     </thead>
 
                                     <tbody>
-                                        {% for cedente_sacado in agrupamento %}
-                                        <tr>
-                                            <td>{{ cedente_sacado }}</td>
+                                        {% for cedente in cedentes %}
+
+                                        <tr class="header">
+                                            <td>Cedente - {{ cedente }}</td>
+                                        </tr>
+
+                                        {% for sacado in sacados %}
+                                        
+                                        {% if sacado.cedente == cedente %}
+                                        <tr class="subheader" style="display: none">
+                                            <td>Sacado - {{ sacado.sacado }}</td>
                                         </tr>
 
                                         {% for titulo in titulos %}
-                                            
-                                        {% if titulo.cedente_sacado == cedente_sacado %}
-                                        <tr>
+                                        
+                                        {% if titulo.cedente.nome == cedente and titulo.sacado.nome == sacado.sacado %}
+                                        <tr style="display: none">
                                             <td></td>
                                             <th scope="row">
                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#modal_titulo_{{titulo.id}}">
@@ -181,13 +188,17 @@
                                             <td>{{ titulo.situacao }}</td>
                                             <td>{{ titulo.data_vencimento|default:'' }}</td>
                                             <td>{{ titulo.data_pagamento|default:'' }}</td>
-                                            <td>{{ titulo.observacao|default:'' }}</td>
                                             <td>{{ titulo.tipo }}</td>
                                             <td>{{ titulo.origem }}</td>
                                             <td>{{ titulo.created_at }}</td>
                                         </tr>
                                         {% endif %}
                                         
+                                        {% endfor %}
+
+
+                                        {% endif %}
+
                                         {% endfor %}
                                         
                                         {% endfor %}
@@ -247,8 +258,14 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label" for="observacao">Observação</label>
-                                    <textarea class="form-control" name="observacao" rows="3">{{ titulo.observacao|default:'' }}</textarea>
+                                    <label class="form-label" for="observacao">Observações</label>
+                                    <textarea class="form-control" name="observacao" rows="3"></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    {% for observacao in titulo.observacoes %}
+                                        <textarea class="form-control" disabled>{{ observacao.descricao }}</textarea>
+                                    {% endfor %}
                                 </div>
 
                                 <div class="mb-3">
@@ -296,6 +313,12 @@
                 });
             }
         })
+
+        $('tr.header').click(function(){
+            $(this).nextUntil('tr.header').css('display', function(i,v){
+                return this.style.display === 'table-row' ? 'none' : 'table-row';
+            });
+        });
     </script>
 </body>
 {% endblock %}

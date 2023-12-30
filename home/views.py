@@ -24,7 +24,8 @@ def home(request):
     if 'situacao_filtro' in request.POST:
         situacao_filtro = request.POST['situacao_filtro']
 
-    agrupamento = []
+    cedentes = []
+    sacados = []
     filtered_titulos = []
 
     titulos = get_titulos_em_aberto()
@@ -38,25 +39,29 @@ def home(request):
                 titulo.data_pagamento_formatada = DateFormat(titulo.data_pagamento)
                 titulo.data_pagamento_formatada = titulo.data_pagamento_formatada.format('Y-m-d')
         titulo.anexos = get_titulo_anexos(titulo.id)
-        
-        cpf_cnpj = ''
-        if titulo.cpf_cnpj:
-            cpf_cnpj = f'- {titulo.cpf_cnpj}'
+        titulo.observacoes = get_titulo_observacoes(titulo.id)
 
-        cedente_sacado = f'{titulo.cedente.nome} / {titulo.sacado.nome} {cpf_cnpj}'
-        titulo.cedente_sacado = cedente_sacado
-
-        has_value = len(search) > 0 and str(search).lower() in str(titulo.cedente_sacado).lower()
+        has_value = len(search) > 0 and str(search).lower() in str(titulo.dados_pagador).lower()
         has_valor_filtro = len(valor_filtro) > 0 and float(valor_filtro) == float(titulo.valor)
         has_situacao_filtro = len(situacao_filtro) > 0 and situacao_filtro == titulo.situacao.descricao
 
+        dados_sacado = {
+            "cedente": titulo.cedente.nome,
+            "sacado": titulo.sacado.nome
+        }
+
         if (not search or has_value) and (not valor_filtro or has_valor_filtro) and (not situacao_filtro or has_situacao_filtro):
-            if not cedente_sacado in agrupamento:
-                agrupamento.append(cedente_sacado)
+            if not titulo.cedente.nome in cedentes:
+                cedentes.append(titulo.cedente.nome)
+            
+            if not dados_sacado in sacados:
+                sacados.append(dados_sacado)
+            
             filtered_titulos.append(titulo)
 
     dados = {
-        'agrupamento': agrupamento,
+        'cedentes': cedentes,
+        'sacados': sacados,
         'titulos': filtered_titulos,
         'links': get_links(),
         'search': search,

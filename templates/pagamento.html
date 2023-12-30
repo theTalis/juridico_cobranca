@@ -145,7 +145,6 @@
                                             <th scope="col">Situação</th>
                                             <th scope="col">Data vencimento</th>
                                             <th scope="col">Data pagamento</th>
-                                            <th scope="col">Observação</th>
                                             <th scope="col">Data inclusão</th>
                                         </tr>
                                     </thead>
@@ -168,7 +167,6 @@
                                             <td>{{ pagamento.situacao }}</td>
                                             <td>{{ pagamento.data_vencimento|default:'' }}</td>
                                             <td>{{ pagamento.data_pagamento|default:'' }}</td>
-                                            <td>{{ pagamento.observacao|default:'' }}</td>
                                             <td>{{ pagamento.created_at }}</td>
                                         </tr>
                                         {% endfor %}

@@ -77,13 +77,23 @@ class Titulo(models.Model):
     data_pagamento = models.DateField(null=True, blank=True)
     tipo = models.CharField(choices=TipoTitulo.choices, default=TipoTitulo.DUPLICATA, max_length=20, null=True, blank=True)
     origem = models.CharField(choices=Origem.choices, default=Origem.SEC, max_length=20, null=True, blank=True)
-    observacao = models.TextField(null=True, blank=True)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
     def __str__(self):
         return f'{self.cedente} - {self.sacado} / {self.valor}'
+
+class Observacao(models.Model):
+    class Meta:
+        db_table = 'observacao'
+    titulo = models.ForeignKey(Titulo, on_delete=models.CASCADE)
+    descricao = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+    def __str__(self):
+        return f'{self.titulo} - {self.created_at}'
 
 class Anexo(models.Model):
     class Meta:

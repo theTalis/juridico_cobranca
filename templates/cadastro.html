@@ -102,12 +102,25 @@
                                 {% endfor %}
                             {% endif %}
                             <div class="mb-3">
-                                <label class="form-label" for="cedente">Cedente</label>
-                                <input type="text" class="form-control" name="cedente" required>
+                                <label class="form-label">Cedente</label>
+
+                                <input name="cedente" class="form-control" list="datalistOptions" placeholder="Selecione o cedente..." required>
+                                <datalist id="datalistOptions">
+                                    {% for cedente in cedentes %}
+                                        <option value="{{ cedente.nome }}">{{ cedente.nome }}</option>
+                                    {% endfor %}
+                                </datalist>
+
                             </div>
                             <div class="mb-3">
                                 <label class="form-label" for="sacado">Sacado</label>
-                                <input type="text" class="form-control" name="sacado" required>
+
+                                <input name="sacado" class="form-control" list="datalistOptions2" placeholder="Selecione o cedente..." required>
+                                <datalist id="datalistOptions2">
+                                    {% for sacado in sacados %}
+                                        <option value="{{ sacado.nome }}">{{ sacado.nome }}</option>
+                                    {% endfor %}
+                                </datalist>
                             </div>
 
                             <div class="mb-3">

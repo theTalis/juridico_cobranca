@@ -115,10 +115,17 @@ def update_titulo(request):
         titulo.data_pagamento = request.POST['data_pagamento']
     if len(request.POST['data_vencimento']) > 0:
         titulo.data_vencimento = request.POST['data_vencimento']
-    titulo.observacao = request.POST['observacao']
     titulo.save()
+
+    if "observacao" in request.POST:
+        observacao = request.POST['observacao']
+        
+        Observacao.objects.create(
+            titulo=titulo,
+            descricao=observacao
+        )
     
-    if "anexo" in request.FILES :
+    if "anexo" in request.FILES:
         anexo = request.FILES['anexo']
         fs = FileSystemStorage()
         filename = fs.save(anexo.name, anexo)
@@ -131,6 +138,9 @@ def update_titulo(request):
 
 def get_dados_titulo_anexos(titulo_id):
     return Anexo.objects.filter(titulo_id=titulo_id).all()
+
+def get_dados_titulo_observacoes(titulo_id):
+    return Observacao.objects.filter(titulo_id=titulo_id).all()
 
 def get_dados_pagamentos():
     situacao = Situacao.objects.get(descricao='PAGO')
