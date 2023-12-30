@@ -191,6 +191,11 @@ def submit_update_titulo(request):
     messages.success(request, 'Cadastro atualizado com sucesso')
     return redirect('home')
 
+def submit_update_observacoes(request):
+    # upset_titulo(request)
+    messages.success(request, 'Cadastro atualizado com sucesso')
+    return redirect('home')
+
 def pagamento(request):
     if not 'user' in request.session:
         messages.warning(
