@@ -41,7 +41,7 @@ def home(request):
         titulo.anexos = get_titulo_anexos(titulo.id)
         titulo.observacoes = get_titulo_observacoes(titulo.id)
 
-        has_value = len(search) > 0 and str(search).lower() in str(titulo.dados_pagador).lower()
+        has_value = len(search) > 0 and (str(search).lower() in str(titulo.cedente.nome).lower() or str(search).lower() in str(titulo.sacado.nome).lower())
         has_valor_filtro = len(valor_filtro) > 0 and float(valor_filtro) == float(titulo.valor)
         has_situacao_filtro = len(situacao_filtro) > 0 and situacao_filtro == titulo.situacao.descricao
 
@@ -176,3 +176,28 @@ def pagamento(request):
         'valor_pago': valor_pago
     }
     return render(request, 'pagamento.html', dados)
+
+def acordo(request):
+    if not 'user' in request.session:
+        messages.warning(
+            request, 'Efetue o login')
+        return redirect('login')
+
+    acordos = get_acordos()
+    dados = {
+        'acordos': acordos
+    }
+    return render(request, 'acordo.html', dados)
+
+def juridico_externo(request):
+    if not 'user' in request.session:
+        messages.warning(
+            request, 'Efetue o login')
+        return redirect('login')
+
+    juridico_externo = get_juridico_externo()
+
+    dados = {
+        'titulos': juridico_externo
+    }
+    return render(request, 'juridico_externo.html', dados)

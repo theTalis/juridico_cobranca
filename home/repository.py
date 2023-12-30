@@ -69,7 +69,6 @@ def create_titulo(request, params):
             pagador=params['pagador'],
             situacao=situacao,
             forma_contato=forma_contato,
-            observacao=params['observacao'],
             data_vencimento=params['data_vencimento'],
             tipo=params['tipo'],
             origem=params['origem'],
@@ -143,5 +142,13 @@ def get_dados_titulo_observacoes(titulo_id):
     return Observacao.objects.filter(titulo_id=titulo_id).all()
 
 def get_dados_pagamentos():
-    situacao = Situacao.objects.get(descricao='PAGO')
-    return Titulo.objects.filter(situacao=situacao).order_by('-updated_at')
+    situacoes = Situacao.objects.filter(descricao__in=['PAGO', 'ACORDO PAGO'])
+    return Titulo.objects.filter(situacao__in=[situacao.descricao for situacao in situacoes]).order_by('-updated_at')
+
+def get_dados_acordos():
+    situacoes = Situacao.objects.filter(descricao__in=['ACORDO EM ABERTO'])
+    return Titulo.objects.filter(situacao__in=[situacao.descricao for situacao in situacoes]).order_by('-updated_at')
+
+def get_dados_juridico_externo():
+    situacoes = Situacao.objects.filter(descricao__in=['JURIDICO EXTERNO'])
+    return Titulo.objects.filter(situacao__in=[situacao.descricao for situacao in situacoes]).order_by('-updated_at')

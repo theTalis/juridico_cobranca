@@ -58,6 +58,31 @@
                                 </span>
                             </a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'acordo' %}" >
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/report-money -->
+                                	<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-layers-intersect" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 4m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z" /><path d="M4 8m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z" /></svg>
+                                </span>
+                                <span class="nav-link-title">
+                                    Acordos
+                                </span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'juridico_externo' %}" >
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/report-money -->
+                                	<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-headset" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 14v-3a8 8 0 1 1 16 0v3" /><path d="M18 19c0 1.657 -2.686 3 -6 3" /><path d="M4 14a2 2 0 0 1 2 -2h1a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-1a2 2 0 0 1 -2 -2v-3z" /><path d="M15 14a2 2 0 0 1 2 -2h1a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-1a2 2 0 0 1 -2 -2v-3z" /></svg>
+                                </span>
+                                <span class="nav-link-title">
+                                    Jurídico externo
+                                </span>
+                            </a>
+                        </li>
+
                         <li class="nav-item">
                             <a class="nav-link text-red" href="{% url 'logout' %}" >
                                 <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
@@ -177,7 +202,9 @@
                                                     {{forloop.counter}}
                                                 </a>
                                             </th>
-                                            <td class="{{ titulo.valor }}">R$ {{ titulo.valor|floatformat:2 }}</td>
+                                            <td class="{{ titulo.valor }}">
+                                                R$ {{ titulo.valor|floatformat:2 }}
+                                            </td>
                                             <td>
                                                 <a href="{{ titulo.whatsapp }}" target="_blank">
                                                     {{ titulo.contato }}

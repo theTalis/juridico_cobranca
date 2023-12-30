@@ -12,6 +12,8 @@ urlpatterns = [
     path('cadastro', cadastro, name="cadastro"),
     path('importacao', importacao, name="importacao"),
     path('pagamento', pagamento, name="pagamento"),
+    path('acordo', acordo, name="acordo"),
+    path('juridico_externo', juridico_externo, name="juridico_externo"),
     path('logout', logout, name="logout"),
 
     path('submit_cadastro', submit_cadastro, name="submit_cadastro"),
