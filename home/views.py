@@ -30,7 +30,7 @@ def home(request):
 
     titulos = get_titulos_em_aberto()
     for titulo in titulos:
-        if titulo.forma_contato.descricao == 'Whatsapp':
+        if titulo.forma_contato.descricao.upper() == 'WHATSAPP':
             titulo.whatsapp = get_whatsapp(titulo.sacado.nome, titulo.contato)
             if titulo.data_vencimento:
                 titulo.data_vencimento_formatada = DateFormat(titulo.data_vencimento)
@@ -40,7 +40,7 @@ def home(request):
                 titulo.data_pagamento_formatada = titulo.data_pagamento_formatada.format('Y-m-d')
         titulo.anexos = get_titulo_anexos(titulo.id)
         titulo.observacoes = get_titulo_observacoes(titulo.id)
-
+        
         has_value = len(search) > 0 and (str(search).lower() in str(titulo.cedente.nome).lower() or str(search).lower() in str(titulo.sacado.nome).lower())
         has_valor_filtro = len(valor_filtro) > 0 and float(valor_filtro) == float(titulo.valor)
         has_situacao_filtro = len(situacao_filtro) > 0 and situacao_filtro == titulo.situacao.descricao
@@ -177,7 +177,7 @@ def submit_importacao(request):
                     'cpf_cnpj': items[2],
                     'sacado': items[3],
                     'tipo': tipo, 
-                    'contato': items[8], 
+                    'contato': get_contato(items[8]), 
                     'valor': valor, 
                     'data_protesto': data_protesto,
                     'origem': items[23],

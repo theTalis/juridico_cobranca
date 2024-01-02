@@ -97,3 +97,5 @@ MESSAGE_TAGS = {
     messages.ERROR: 'danger',
     messages.SUCCESS: 'success',
 }
+
+USE_THOUSAND_SEPARATOR = True

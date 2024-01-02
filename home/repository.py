@@ -85,7 +85,7 @@ def create_arquivo(filename):
     )
 
 def get_dados_titulos_em_aberto():
-    return Titulo.objects.filter(data_pagamento=None).order_by("cedente__nome", "sacado__nome").all()
+    return Titulo.objects.filter(data_pagamento=None).order_by("data_vencimento").all()
 
 def get_dados_situacoes():
     return Situacao.objects.all()

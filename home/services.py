@@ -63,9 +63,17 @@ def get_whatsapp(nome, telefone):
     template = get_dados_template_whatsapp()
 
     telefone = str(int(''.join(filter(str.isdigit, f'55{telefone}'))))
+    telefone = str(int(telefone.replace(' ', '')))
     link_whatsapp = template.conteudo.replace('NOME', nome)
     link_whatsapp = link_whatsapp.replace('TELEFONE', telefone)
     return link_whatsapp
+
+def get_contato(contato):
+    if len(contato) > 0:
+        contato = str(int(''.join(filter(str.isdigit, contato))))
+        contato = str(int(contato.replace(' ', '')))
+        return contato
+    return ''
 
 def get_links():
     return get_dados_links()
