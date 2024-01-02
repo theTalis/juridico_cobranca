@@ -44,6 +44,9 @@ def set_titulo(request):
 def upset_titulo(request):
     return update_titulo(request)
 
+def upset_pagamento(request):
+    return update_pagamento(request)
+
 def upset_observacoes(request):
     return update_observacoes(request)
 

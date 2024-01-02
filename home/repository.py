@@ -66,6 +66,7 @@ def create_titulo(request, params):
             cpf_cnpj=params['cpf_cnpj'],
             valor=params['valor'],
             contato=params['contato'],
+            contato_secundario=params['contato_secundario'],
             pagador=params['pagador'],
             situacao=situacao,
             forma_contato=forma_contato,
@@ -110,6 +111,7 @@ def update_titulo(request):
     titulo.situacao = situacao
     titulo.forma_contato = forma_contato
     titulo.contato = request.POST['contato']
+    titulo.contato_secundario = request.POST['contato_secundario']
     if len(request.POST['data_pagamento']) > 0:
         titulo.data_pagamento = request.POST['data_pagamento']
     if len(request.POST['data_vencimento']) > 0:
@@ -126,6 +128,15 @@ def update_titulo(request):
             descricao=filename,
             arquivo=anexo
         )
+
+def update_pagamento(request):
+    situacao = Situacao.objects.get(descricao=request.POST['situacao'])
+
+    titulo = Titulo.objects.get(pk=request.POST['pagamento_id'])
+    titulo.situacao = situacao
+    if len(request.POST['data_pagamento']) > 0:
+        titulo.data_pagamento = request.POST['data_pagamento']
+    titulo.save()
 
 def update_observacoes(request):
     titulo = Titulo.objects.get(pk=request.POST['titulo_id'])

@@ -69,6 +69,7 @@ class Titulo(models.Model):
     cpf_cnpj = models.CharField(max_length=30, null=True, blank=True)
     valor = models.FloatField(null=True, blank=True)
     contato = models.CharField(max_length=100, null=True, blank=True)
+    contato_secundario = models.CharField(max_length=300, null=True, blank=True)
     pagador = models.CharField(choices=Pagador.choices, default=Pagador.CEDENTE, max_length=20, null=True, blank=True)
     situacao = models.ForeignKey(Situacao, on_delete=models.CASCADE, null=True, blank=True)
     forma_contato = models.ForeignKey(FormaContato, on_delete=models.CASCADE, null=True, blank=True)

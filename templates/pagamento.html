@@ -189,7 +189,9 @@
                                         {% for pagamento in pagamentos %}
                                         <tr>
                                             <th scope="row">
-                                                {{forloop.counter}}
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#modal_pagamento_{{pagamento.id}}">
+                                                    {{forloop.counter}}
+                                                </a>
                                             </th>
                                             <td>{{ pagamento.cedente }}</td>
                                             <td>{{ pagamento.sacado }}</td>
@@ -215,6 +217,45 @@
                 </div>
             </div>
         </div>
+
+        {% for pagamento in pagamentos %}
+        <div class="modal" id="modal_pagamento_{{pagamento.id}}" tabindex="-1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{pagamento.cedente}} - {{pagamento.sacado}} | R$ {{ pagamento.valor|floatformat:2  }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <form method="post" action="{% url 'submit_update_pagamento' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="pagamento_id" value="{{ pagamento.id }}">
+
+                            <div class="mb-3">
+                                <label class="form-label" for="situacao">Situação</label>
+                                <select id="situacao" name="situacao" class="form-select" aria-label="Situação" required>
+                                {% for situacao in situacoes %}
+                                    <option value="{{ situacao.descricao }}" {% if situacao.descricao == pagamento.situacao.descricao %} selected {% endif %}>{{ situacao.descricao }}</option>
+                                {% endfor %}
+                                </select>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="data_pagamento">Data pagamento</label>
+                                    <input type="date" class="form-control" name="data_pagamento" value="{{ pagamento.data_pagamento_formatada|default:'' }}">
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn me-auto" data-bs-dismiss="modal">Fechar</button>
+                                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Confirmar alterações</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
     </div>    
     <script src="https://unpkg.com/@tabler/core@latest/dist/js/tabler.min.js"></script>
 </body>

@@ -291,6 +291,11 @@
                                                 </div>
 
                                                 <div class="mb-3">
+                                                    <label class="form-label" for="contato_secundario">Contato Secundário</label>
+                                                    <input type="text" class="form-control" id="contato_secundario" name="contato_secundario" value="{{ titulo.contato_secundario|default:'' }}">
+                                                </div>
+
+                                                <div class="mb-3">
                                                     <label class="form-label" for="data_vencimento">Data vencimento</label>
                                                     <input type="date" class="form-control" name="data_vencimento" value="{{ titulo.data_vencimento_formatada|default:'' }}">
                                                 </div>

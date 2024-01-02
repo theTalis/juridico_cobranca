@@ -194,6 +194,11 @@ def submit_update_titulo(request):
     messages.success(request, 'Cadastro atualizado com sucesso')
     return redirect('home')
 
+def submit_update_pagamento(request):
+    upset_pagamento(request)
+    messages.success(request, 'Cadastro atualizado com sucesso')
+    return redirect('pagamento')
+
 def submit_update_observacoes(request):
     upset_observacoes(request)
     messages.success(request, 'Cadastro atualizado com sucesso')
@@ -223,12 +228,17 @@ def pagamento(request):
         quantidade_pagamentos += 1
         valor_pago += pagamento.valor
 
+        if pagamento.data_pagamento:
+            pagamento.data_pagamento_formatada = DateFormat(pagamento.data_pagamento)
+            pagamento.data_pagamento_formatada = pagamento.data_pagamento_formatada.format('Y-m-d')
+
     dados = {
         'pagamentos': pagamentos,
         'quantidade_pagamentos': quantidade_pagamentos,
         'valor_pago': valor_pago,
         'data_inicial': data_inicial,
         'data_final': data_final,
+        'situacoes': get_situacoes()
     }
     return render(request, 'pagamento.html', dados)
 
@@ -249,10 +259,16 @@ def acordo(request):
         data_final = request.POST['data_final']
 
     acordos = get_acordos(data_inicial, data_final)
+    for acordo in acordos:
+        if acordo.data_pagamento:
+            acordo.data_pagamento_formatada = DateFormat(acordo.data_pagamento)
+            acordo.data_pagamento_formatada = acordo.data_pagamento_formatada.format('Y-m-d')
+
     dados = {
         'acordos': acordos,
         'data_inicial': data_inicial,
-        'data_final': data_final
+        'data_final': data_final,
+        'situacoes': get_situacoes()
     }
     return render(request, 'acordo.html', dados)
 
