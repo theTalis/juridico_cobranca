@@ -199,7 +199,7 @@
                     </div>
 
                     <div class="modal-body">
-                        <form method="post" action="{% url 'submit_update_pagamento' %}">
+                        <form method="post" action="{% url 'submit_update_juridico_externo' %}">
                             {% csrf_token %}
                             <input type="hidden" name="pagamento_id" value="{{ titulo.id }}">
 
@@ -210,6 +210,11 @@
                                     <option value="{{ situacao.descricao }}" {% if situacao.descricao == titulo.situacao.descricao %} selected {% endif %}>{{ situacao.descricao }}</option>
                                 {% endfor %}
                                 </select>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="data_vencimento">Data vencimento</label>
+                                    <input type="date" class="form-control" name="data_vencimento" value="{{ titulo.data_vencimento_formatada|default:'' }}">
+                                </div>
 
                                 <div class="mb-3">
                                     <label class="form-label" for="data_pagamento">Data pagamento</label>

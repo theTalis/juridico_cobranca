@@ -167,11 +167,7 @@
                                             <td>{{ acordo.cedente }}</td>
                                             <td>{{ acordo.sacado }}</td>
                                             <td class="{{ acordo.valor }}">R$ {{ acordo.valor|floatformat:2 }}</td>
-                                            <td>
-                                                <a href="{{ acordo.whatsapp }}" target="_blank">
-                                                    {{ acordo.contato }}
-                                                </a>
-                                            </td>
+                                            <td>{{ acordo.contato }}</td>
                                             <td>{{ acordo.forma_contato }}</td>
                                             <td>{{ acordo.pagador }}</td>
                                             <td>{{ acordo.situacao }}</td>
@@ -199,7 +195,7 @@
                     </div>
 
                     <div class="modal-body">
-                        <form method="post" action="{% url 'submit_update_pagamento' %}">
+                        <form method="post" action="{% url 'submit_update_acordo' %}">
                             {% csrf_token %}
                             <input type="hidden" name="pagamento_id" value="{{ acordo.id }}">
 
@@ -210,6 +206,11 @@
                                     <option value="{{ situacao.descricao }}" {% if situacao.descricao == acordo.situacao.descricao %} selected {% endif %}>{{ situacao.descricao }}</option>
                                 {% endfor %}
                                 </select>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="data_vencimento">Data vencimento</label>
+                                    <input type="date" class="form-control" name="data_vencimento" value="{{ acordo.data_vencimento_formatada|default:'' }}">
+                                </div>
 
                                 <div class="mb-3">
                                     <label class="form-label" for="data_pagamento">Data pagamento</label>

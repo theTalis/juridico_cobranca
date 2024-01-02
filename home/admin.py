@@ -44,7 +44,7 @@ class ListandoTitulos(admin.ModelAdmin):
     list_per_page = 30
     ordering = ('valor',)
     fields = ('cedente', 'sacado', 'valor', 'contato', 'contato_secundario', 'pagador', 'situacao', 'forma_contato',
-        'observacao', 'data_vencimento', 'data_pagamento', 'usuario', )    
+        'data_vencimento', 'data_pagamento', 'usuario', )    
 admin.site.register(Titulo, ListandoTitulos)
 
 class ListandoAnexos(admin.ModelAdmin):

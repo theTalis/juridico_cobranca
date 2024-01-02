@@ -196,11 +196,7 @@
                                             <td>{{ pagamento.cedente }}</td>
                                             <td>{{ pagamento.sacado }}</td>
                                             <td class="{{ pagamento.valor }}">R$ {{ pagamento.valor|floatformat:2 }}</td>
-                                            <td>
-                                                <a href="{{ pagamento.whatsapp }}" target="_blank">
-                                                    {{ pagamento.contato }}
-                                                </a>
-                                            </td>
+                                            <td>{{ pagamento.contato }}</td>
                                             <td>{{ pagamento.forma_contato }}</td>
                                             <td>{{ pagamento.pagador }}</td>
                                             <td>{{ pagamento.situacao }}</td>

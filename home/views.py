@@ -199,6 +199,16 @@ def submit_update_pagamento(request):
     messages.success(request, 'Cadastro atualizado com sucesso')
     return redirect('pagamento')
 
+def submit_update_acordo(request):
+    upset_pagamento(request)
+    messages.success(request, 'Cadastro atualizado com sucesso')
+    return redirect('acordo')
+
+def submit_update_juridico_externo(request):
+    upset_pagamento(request)
+    messages.success(request, 'Cadastro atualizado com sucesso')
+    return redirect('juridico_externo')
+
 def submit_update_observacoes(request):
     upset_observacoes(request)
     messages.success(request, 'Cadastro atualizado com sucesso')
@@ -264,6 +274,10 @@ def acordo(request):
             acordo.data_pagamento_formatada = DateFormat(acordo.data_pagamento)
             acordo.data_pagamento_formatada = acordo.data_pagamento_formatada.format('Y-m-d')
 
+        if acordo.data_vencimento:
+            acordo.data_vencimento_formatada = DateFormat(acordo.data_vencimento)
+            acordo.data_vencimento_formatada = acordo.data_vencimento_formatada.format('Y-m-d')
+
     dados = {
         'acordos': acordos,
         'data_inicial': data_inicial,
@@ -288,11 +302,21 @@ def juridico_externo(request):
     if 'data_final' in request.POST:
         data_final = request.POST['data_final']
 
-    juridico_externo = get_juridico_externo(data_inicial, data_final)
+    titulos = get_juridico_externo(data_inicial, data_final)
+
+    for titulo in titulos:
+        if titulo.data_pagamento:
+            titulo.data_pagamento_formatada = DateFormat(titulo.data_pagamento)
+            titulo.data_pagamento_formatada = titulo.data_pagamento_formatada.format('Y-m-d')
+
+        if titulo.data_vencimento:
+            titulo.data_vencimento_formatada = DateFormat(titulo.data_vencimento)
+            titulo.data_vencimento_formatada = titulo.data_vencimento_formatada.format('Y-m-d')
 
     dados = {
-        'titulos': juridico_externo,
+        'titulos': titulos,
         'data_inicial': data_inicial,
-        'data_final': data_final
+        'data_final': data_final,
+        'situacoes': get_situacoes()
     }
     return render(request, 'juridico_externo.html', dados)

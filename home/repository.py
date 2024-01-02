@@ -66,7 +66,6 @@ def create_titulo(request, params):
             cpf_cnpj=params['cpf_cnpj'],
             valor=params['valor'],
             contato=params['contato'],
-            contato_secundario=params['contato_secundario'],
             pagador=params['pagador'],
             situacao=situacao,
             forma_contato=forma_contato,
@@ -86,7 +85,8 @@ def create_arquivo(filename):
     )
 
 def get_dados_titulos_em_aberto():
-    return Titulo.objects.filter(data_pagamento=None).order_by("data_vencimento").all()
+    situacoes = Situacao.objects.filter(descricao__in=['EM ABERTO'])
+    return Titulo.objects.filter(situacao__in=[situacao.descricao for situacao in situacoes]).order_by('data_vencimento')
 
 def get_dados_situacoes():
     return Situacao.objects.all()
@@ -136,6 +136,11 @@ def update_pagamento(request):
     titulo.situacao = situacao
     if len(request.POST['data_pagamento']) > 0:
         titulo.data_pagamento = request.POST['data_pagamento']
+    else:
+        titulo.data_pagamento = None
+
+    if len(request.POST['data_vencimento']) > 0:
+        titulo.data_vencimento = request.POST['data_vencimento']
     titulo.save()
 
 def update_observacoes(request):
