@@ -147,13 +147,13 @@ def submit_importacao(request):
         lines = content.splitlines()
         for line in lines:
             line = str(line)
-            items = line.split(',')
+            items = line.split(';')
 
-            if len(items[3]) > 0:
+            if len(items[2]) > 0:
                 tipo = ''
-                if items[10] == 'DP':
+                if items[8] == 'DP':
                     tipo = 'DUPLICATA'
-                elif items[10] == 'CQ':
+                elif items[8] == 'CQ':
                     tipo = 'CHEQUE'
 
                 data_vencimento = ''
@@ -162,25 +162,27 @@ def submit_importacao(request):
                     data_vencimento = datetime.strptime(data_vencimento, "%d/%m/%Y").strftime("%Y-%m-%d")
 
                 data_protesto = ''
-                if (len(items[19]) > 0):
-                    data_protesto = str(items[19]).replace('b', '').replace("'", '')
+                if (len(items[14]) > 0):
+                    data_protesto = str(items[14]).replace('b', '').replace("'", '')
                     data_protesto = datetime.strptime(data_protesto, "%d/%m/%Y").strftime("%Y-%m-%d")
 
                 valor = 0
                 if (len(items[12]) > 0):
-                    valor = str(items[12]).replace('b', '').replace('"', '')
+                    valor = str(items[12]).replace('.', '').replace(',', '.')
                     valor = float(valor)
                 
+                origem = str(items[17]).replace("'", "")
+
                 dados = {
                     'cedente': cedente,
                     'data_vencimento': data_vencimento,
-                    'cpf_cnpj': items[2],
-                    'sacado': items[3],
+                    'cpf_cnpj': items[1],
+                    'sacado': items[2],
                     'tipo': tipo, 
-                    'contato': get_contato(items[8]), 
+                    'contato': get_contato(items[7]), 
                     'valor': valor, 
                     'data_protesto': data_protesto,
-                    'origem': items[23],
+                    'origem': origem,
                     'forma_contato': 'WHATSAPP',
                     'pagador': 'SACADO'
                 }
