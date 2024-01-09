@@ -167,8 +167,8 @@ def submit_importacao(request):
                     data_protesto = datetime.strptime(data_protesto, "%d/%m/%Y").strftime("%Y-%m-%d")
 
                 valor = 0
-                if (len(items[12]) > 0):
-                    valor = str(items[12]).replace('.', '').replace(',', '.')
+                if (len(items[10]) > 0):
+                    valor = str(items[10]).replace('.', '').replace(',', '.')
                     valor = float(valor)
                 
                 origem = str(items[17]).replace("'", "")
