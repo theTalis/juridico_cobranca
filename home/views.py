@@ -232,6 +232,11 @@ def submit_update_observacoes(request):
     messages.success(request, 'Cadastro atualizado com sucesso')
     return redirect('home')
 
+def submit_update_observacoes_acordo(request):
+    upset_observacoes(request)
+    messages.success(request, 'Cadastro atualizado com sucesso')
+    return redirect('acordo')
+
 def pagamento(request):
     if not 'user' in request.session:
         messages.warning(
@@ -295,6 +300,7 @@ def acordo(request):
         if acordo.data_vencimento:
             acordo.data_vencimento_formatada = DateFormat(acordo.data_vencimento)
             acordo.data_vencimento_formatada = acordo.data_vencimento_formatada.format('Y-m-d')
+        acordo.observacoes = get_titulo_observacoes(acordo.id)
 
     dados = {
         'acordos': acordos,

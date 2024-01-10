@@ -26,5 +26,6 @@ urlpatterns = [
     path('submit_update_acordo', submit_update_acordo, name="submit_update_acordo"),
     path('submit_update_juridico_externo', submit_update_juridico_externo, name="submit_update_juridico_externo"),
     path('submit_update_observacoes', submit_update_observacoes, name="submit_update_observacoes"),
+    path('submit_update_observacoes_acordo', submit_update_observacoes_acordo, name="submit_update_observacoes_acordo"),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
