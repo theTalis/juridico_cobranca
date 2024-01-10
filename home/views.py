@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.contrib.auth import authenticate
 from .services import *
 from django.utils.dateformat import DateFormat
 from datetime import datetime, timedelta
+from django.http import JsonResponse
+import json
 
 def home(request):
     if not 'user' in request.session:
@@ -133,6 +135,18 @@ def submit_cadastro(request):
         messages.warning(request, erros_cadastro)
     return redirect('cadastro')
 
+@csrf_exempt
+def update_checked(request):
+    json_body = json.loads(request.body)
+
+    titulo_id = str(json_body["id"]).replace("marcado_", "")
+
+    titulo = Titulo.objects.get(pk=titulo_id)
+    titulo.marcado = json_body["checked"]
+    titulo.save()
+
+    return JsonResponse({})
+
 def submit_importacao(request):
     cedente = ''
     if 'cedente' in request.POST:
@@ -224,11 +238,11 @@ def pagamento(request):
 
     data_atual = datetime.today()
     
-    data_inicial = str(data_atual - timedelta(days=7))[0:10]
+    data_inicial = str(data_atual - timedelta(days=180))[0:10]
     if 'data_inicial' in request.POST:
         data_inicial = request.POST['data_inicial']
 
-    data_final = str(data_atual + timedelta(days=7))[0:10]
+    data_final = str(data_atual + timedelta(days=180))[0:10]
     if 'data_final' in request.POST:
         data_final = request.POST['data_final']
 
@@ -262,11 +276,11 @@ def acordo(request):
 
     data_atual = datetime.today()
     
-    data_inicial = str(data_atual - timedelta(days=7))[0:10]
+    data_inicial = str(data_atual - timedelta(days=180))[0:10]
     if 'data_inicial' in request.POST:
         data_inicial = request.POST['data_inicial']
 
-    data_final = str(data_atual + timedelta(days=7))[0:10]
+    data_final = str(data_atual + timedelta(days=180))[0:10]
     if 'data_final' in request.POST:
         data_final = request.POST['data_final']
 
@@ -296,11 +310,11 @@ def juridico_externo(request):
 
     data_atual = datetime.today()
     
-    data_inicial = str(data_atual - timedelta(days=7))[0:10]
+    data_inicial = str(data_atual - timedelta(days=180))[0:10]
     if 'data_inicial' in request.POST:
         data_inicial = request.POST['data_inicial']
 
-    data_final = str(data_atual + timedelta(days=7))[0:10]
+    data_final = str(data_atual + timedelta(days=180))[0:10]
     if 'data_final' in request.POST:
         data_final = request.POST['data_final']
 

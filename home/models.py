@@ -79,6 +79,7 @@ class Titulo(models.Model):
     tipo = models.CharField(choices=TipoTitulo.choices, default=TipoTitulo.DUPLICATA, max_length=20, null=True, blank=True)
     origem = models.CharField(choices=Origem.choices, default=Origem.SEC, max_length=20, null=True, blank=True)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    marcado = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)

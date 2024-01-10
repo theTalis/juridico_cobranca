@@ -139,8 +139,6 @@ def update_pagamento(request):
     else:
         titulo.data_pagamento = None
 
-    if len(request.POST['data_vencimento']) > 0:
-        titulo.data_vencimento = request.POST['data_vencimento']
     titulo.save()
 
 def update_observacoes(request):

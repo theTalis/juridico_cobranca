@@ -197,6 +197,8 @@
                                         {% if titulo.cedente.nome == cedente and titulo.sacado.nome == sacado.sacado %}
                                         <tr style="display: none">
                                             <td></td>
+                                            <td><input id="marcado_{{titulo.id}}" class="marcado" type="checkbox" {% if titulo.marcado %} checked {% endif %}></td>
+
                                             <th scope="row">
                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#modal_titulo_{{titulo.id}}">
                                                     {{forloop.counter}}
@@ -379,6 +381,27 @@
             }
         })
 
+        $(".marcado").on("change", function() {
+            const item = {
+                id: $(this).attr("id"),
+                checked: $(this).is(':checked')
+            }
+
+            $.ajax({
+                url: "update_checked",
+                type: "POST",
+                dataType: "json",
+                data: JSON.stringify(item),
+                headers: {
+                  "X-Requested-With": "XMLHttpRequest",
+                },
+                success: (data) => {
+                },
+                error: (error) => {
+                }
+              });
+        })
+        
         $('tr.header').click(function(){
             $(this).nextUntil('tr.header').css('display', function(i,v){
                 return this.style.display === 'table-row' ? 'none' : 'table-row';

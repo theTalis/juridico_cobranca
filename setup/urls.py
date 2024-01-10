@@ -16,6 +16,8 @@ urlpatterns = [
     path('juridico_externo', juridico_externo, name="juridico_externo"),
     path('logout', logout, name="logout"),
 
+    path('update_checked', update_checked, name="update_checked"),
+
     path('submit_cadastro', submit_cadastro, name="submit_cadastro"),
     path('submit_importacao', submit_importacao, name="submit_importacao"),
     path('submit_update_titulo', submit_update_titulo, name="submit_update_titulo"),
