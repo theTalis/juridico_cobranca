@@ -151,7 +151,16 @@
                                 </div>
 
                                 <div class="col-2 p-5">
-                                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Pesquisar</button>
+                                    <button type="submit" class="btn btn-primary">Pesquisar</button>
+                                </div>
+
+                                <div class="col-4 pl-5 mt-4 row">
+                                    <div class="col-4 p-2">
+                                        <button type="button" onclick="marcarTodos()" class="btn btn-primary">Marcar todos</button>
+                                    </div>
+                                    <div class="col-2 p-2">
+                                        <button type="button" onclick="desmarcarTodos()" class="btn btn-primary">Desmarcar todos</button>
+                                    </div>
                                 </div>
                             </div>
                         </form>
@@ -382,16 +391,50 @@
         })
 
         $(".marcado").on("change", function() {
-            const item = {
+            const items = [{
                 id: $(this).attr("id"),
                 checked: $(this).is(':checked')
-            }
+            }]
+
+            callUpdate(items)
+        })
+
+        function marcarTodos() {
+            $(".marcado").prop('checked',true);
+
+            let items = []
+            $(".marcado").each(function() {
+                items.push({
+                    id: $(this).attr("id"),
+                    checked: true
+                })
+            })
+
+            callUpdate(items)
+        }
+
+        function desmarcarTodos() {
+            $(".marcado").prop('checked',false);
+
+            let items = []
+            $(".marcado").each(function() {
+                items.push({
+                    id: $(this).attr("id"),
+                    checked: false
+                })
+            })
+
+            callUpdate(items)
+
+        }
+
+        function callUpdate(items) {
 
             $.ajax({
                 url: "update_checked",
                 type: "POST",
                 dataType: "json",
-                data: JSON.stringify(item),
+                data: JSON.stringify({"items": items}),
                 headers: {
                   "X-Requested-With": "XMLHttpRequest",
                 },
@@ -400,7 +443,7 @@
                 error: (error) => {
                 }
               });
-        })
+        }
         
         $('tr.header').click(function(){
             $(this).nextUntil('tr.header').css('display', function(i,v){

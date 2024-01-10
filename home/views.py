@@ -139,11 +139,13 @@ def submit_cadastro(request):
 def update_checked(request):
     json_body = json.loads(request.body)
 
-    titulo_id = str(json_body["id"]).replace("marcado_", "")
+    items = json_body["items"]
+    for item in items:
+        titulo_id = str(item["id"]).replace("marcado_", "")
 
-    titulo = Titulo.objects.get(pk=titulo_id)
-    titulo.marcado = json_body["checked"]
-    titulo.save()
+        titulo = Titulo.objects.get(pk=titulo_id)
+        titulo.marcado = item["checked"]
+        titulo.save()
 
     return JsonResponse({})
 
