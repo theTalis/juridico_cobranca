@@ -237,6 +237,16 @@ def submit_update_observacoes_acordo(request):
     messages.success(request, 'Cadastro atualizado com sucesso')
     return redirect('acordo')
 
+def submit_pagamento_parcial(request):
+    set_pagamento_parcial(request)
+    messages.success(request, 'Cadastro atualizado com sucesso')
+    return redirect('home')
+
+def submit_pagamento_parcial_acordo(request):
+    set_pagamento_parcial(request, True)
+    messages.success(request, 'Cadastro atualizado com sucesso')
+    return redirect('acordo')
+
 def pagamento(request):
     if not 'user' in request.session:
         messages.warning(
@@ -293,6 +303,8 @@ def acordo(request):
 
     acordos = get_acordos(data_inicial, data_final)
     for acordo in acordos:
+        if acordo.forma_contato.descricao.upper() == 'WHATSAPP':
+            acordo.whatsapp = get_whatsapp(acordo.sacado.nome, acordo.contato)
         if acordo.data_pagamento:
             acordo.data_pagamento_formatada = DateFormat(acordo.data_pagamento)
             acordo.data_pagamento_formatada = acordo.data_pagamento_formatada.format('Y-m-d')

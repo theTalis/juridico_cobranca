@@ -28,4 +28,7 @@ urlpatterns = [
     path('submit_update_observacoes', submit_update_observacoes, name="submit_update_observacoes"),
     path('submit_update_observacoes_acordo', submit_update_observacoes_acordo, name="submit_update_observacoes_acordo"),
 
+    path('submit_pagamento_parcial', submit_pagamento_parcial, name="submit_pagamento_parcial"),
+    path('submit_pagamento_parcial_acordo', submit_pagamento_parcial_acordo, name="submit_pagamento_parcial_acordo"),
+
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

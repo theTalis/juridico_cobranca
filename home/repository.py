@@ -161,6 +161,35 @@ def update_observacoes(request):
                 observacao.descricao = request.POST[f'observacao_{observacao.id}']
                 observacao.save()
 
+def create_pagamento_parcial(request, is_acordo):
+    if "data_pagamento" in request.POST and len(request.POST['data_pagamento']) > 0:
+        data_pagamento = request.POST['data_pagamento']
+        valor_pagamento = float(request.POST['valor_pagamento'])
+
+        descricao = 'PAGO'
+        if is_acordo:
+            descricao = 'ACORDO PAGO'
+
+        try:
+            situacao = Situacao.objects.get(descricao=descricao)
+        except Situacao.DoesNotExist:
+            situacao = Situacao.objects.create(
+                descricao="EM ABERTO"
+            )
+
+        titulo = Titulo.objects.get(pk=request.POST['titulo_id'])
+        valor_original = titulo.valor
+        
+        titulo_parcial = Titulo.objects.get(pk=request.POST['titulo_id'])
+        titulo_parcial.pk = None
+        titulo_parcial.situacao = situacao
+        titulo_parcial.data_pagamento = data_pagamento
+        titulo_parcial.valor = valor_pagamento
+        titulo_parcial.save()
+
+        titulo.valor = valor_original - valor_pagamento
+        titulo.save()
+
 def get_dados_titulo_anexos(titulo_id):
     return Anexo.objects.filter(titulo_id=titulo_id).all()
 

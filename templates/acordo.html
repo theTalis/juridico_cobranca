@@ -167,7 +167,11 @@
                                             <td>{{ acordo.cedente }}</td>
                                             <td>{{ acordo.sacado }}</td>
                                             <td class="{{ acordo.valor }}">R$ {{ acordo.valor|floatformat:2 }}</td>
-                                            <td>{{ acordo.contato }}</td>
+                                            <td>
+                                                <a href="{{ acordo.whatsapp }}" target="_blank">
+                                                    {{ acordo.contato }}
+                                                </a>
+                                            </td>
                                             <td>{{ acordo.forma_contato }}</td>
                                             <td>{{ acordo.pagador }}</td>
                                             <td>{{ acordo.situacao }}</td>
@@ -204,6 +208,9 @@
                                     </li>
                                     <li class="nav-item" role="presentation">
                                         <a href="#tabs-observacoes_{{acordo.id}}" class="nav-link" data-bs-toggle="tab" aria-selected="true" role="tab">Observações</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a href="#tabs-parcial_{{acordo.id}}" class="nav-link" data-bs-toggle="tab" aria-selected="true" role="tab">Pagto. parcial</a>
                                     </li>
                                 </ul>
                             </div>
@@ -261,6 +268,30 @@
                                             <div class="modal-footer">
                                                 <button type="button" class="btn me-auto" data-bs-dismiss="modal">Fechar</button>
                                                 <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Confirmar observações</button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <div class="tab-pane" id="tabs-parcial_{{acordo.id}}" role="tabpanel">
+                                        <form method="post" action="{% url 'submit_pagamento_parcial_acordo' %}" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="titulo_id" value="{{ acordo.id }}">
+
+                                            <div class="mb-3">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="data_pagamento">Data pagamento</label>
+                                                    <input type="date" class="form-control" name="data_pagamento" value="{{ acordo.data_pagamento_formatada|default:'' }}">
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="valor_pagamento">Valor Pagamento</label>
+                                                    <input type="number" class="form-control" name="valor_pagamento" value="{{ valor_pagamento|default:'' }}">
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn me-auto" data-bs-dismiss="modal">Fechar</button>
+                                                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Confirmar Pagto. Parcial</button>
                                             </div>
                                         </form>
                                     </div>

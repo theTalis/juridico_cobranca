@@ -50,6 +50,9 @@ def upset_pagamento(request):
 def upset_observacoes(request):
     return update_observacoes(request)
 
+def set_pagamento_parcial(request, is_acordo=False):
+    return create_pagamento_parcial(request, is_acordo)
+
 def set_arquivo(filename):
     return create_arquivo(filename)
 
