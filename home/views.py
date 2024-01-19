@@ -32,14 +32,14 @@ def home(request):
 
     titulos = get_titulos_em_aberto()
     for titulo in titulos:
-        if titulo.forma_contato.descricao.upper() == 'WHATSAPP':
+        if titulo.forma_contato and titulo.forma_contato.descricao.upper() == 'WHATSAPP':
             titulo.whatsapp = get_whatsapp(titulo.sacado.nome, titulo.contato)
-            if titulo.data_vencimento:
-                titulo.data_vencimento_formatada = DateFormat(titulo.data_vencimento)
-                titulo.data_vencimento_formatada = titulo.data_vencimento_formatada.format('Y-m-d')
-            if titulo.data_pagamento:
-                titulo.data_pagamento_formatada = DateFormat(titulo.data_pagamento)
-                titulo.data_pagamento_formatada = titulo.data_pagamento_formatada.format('Y-m-d')
+        if titulo.data_vencimento:
+            titulo.data_vencimento_formatada = DateFormat(titulo.data_vencimento)
+            titulo.data_vencimento_formatada = titulo.data_vencimento_formatada.format('Y-m-d')
+        if titulo.data_pagamento:
+            titulo.data_pagamento_formatada = DateFormat(titulo.data_pagamento)
+            titulo.data_pagamento_formatada = titulo.data_pagamento_formatada.format('Y-m-d')
         titulo.anexos = get_titulo_anexos(titulo.id)
         titulo.observacoes = get_titulo_observacoes(titulo.id)
         
