@@ -30,21 +30,21 @@ def get_dados_formas_contato():
     
 def create_titulo(request, params):
     try:
-        cedente = Cedente.objects.get(nome=params['cedente'])
+        cedente = Cedente.objects.filter(nome=params['cedente']).first()
     except Cedente.DoesNotExist:
         cedente = Cedente.objects.create(
             nome=params['cedente']
         )
 
     try:
-        sacado = Sacado.objects.get(nome=params['sacado'])
+        sacado = Sacado.objects.filter(nome=params['sacado']).first()
     except Sacado.DoesNotExist:
         sacado = Sacado.objects.create(
             nome=params['sacado']
         )
 
     try:
-        situacao = Situacao.objects.get(descricao="EM ABERTO")
+        situacao = Situacao.objects.filter(descricao="EM ABERTO").first()
     except Situacao.DoesNotExist:
         situacao = Situacao.objects.create(
             descricao="EM ABERTO"
