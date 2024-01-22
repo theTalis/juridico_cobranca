@@ -139,6 +139,11 @@ def update_pagamento(request):
     else:
         titulo.data_pagamento = None
 
+    if len(request.POST['data_vencimento']) > 0:
+        titulo.data_vencimento = request.POST['data_vencimento']
+    else:
+        titulo.data_vencimento = None
+
     titulo.save()
 
 def update_observacoes(request):
@@ -203,10 +208,10 @@ def get_dados_pagamentos(data_inicial, data_final):
 
 def get_dados_acordos(data_inicial, data_final):
     situacoes = Situacao.objects.filter(descricao__in=['ACORDO EM ABERTO'])
-    titulos = Titulo.objects.filter(situacao__in=[situacao.descricao for situacao in situacoes], data_vencimento__gte=data_inicial, data_vencimento__lte=data_final).order_by('-updated_at') | Titulo.objects.filter(situacao__in=[situacao.descricao for situacao in situacoes], data_vencimento=None).order_by('-updated_at')
+    titulos = Titulo.objects.filter(situacao__in=[situacao.descricao for situacao in situacoes], data_vencimento__gte=data_inicial, data_vencimento__lte=data_final).order_by('-data_vencimento') | Titulo.objects.filter(situacao__in=[situacao.descricao for situacao in situacoes], data_vencimento=None).order_by('-updated_at')
     return titulos
 
 def get_dados_juridico_externo(data_inicial, data_final):
     situacoes = Situacao.objects.filter(descricao__in=['JURIDICO EXTERNO'])
-    titulos = Titulo.objects.filter(situacao__in=[situacao.descricao for situacao in situacoes], data_vencimento__gte=data_inicial, data_vencimento__lte=data_final).order_by('-updated_at') | Titulo.objects.filter(situacao__in=[situacao.descricao for situacao in situacoes], data_vencimento=None).order_by('-updated_at')
+    titulos = Titulo.objects.filter(situacao__in=[situacao.descricao for situacao in situacoes], data_vencimento__gte=data_inicial, data_vencimento__lte=data_final).order_by('-data_vencimento') | Titulo.objects.filter(situacao__in=[situacao.descricao for situacao in situacoes], data_vencimento=None).order_by('-updated_at')
     return titulos
