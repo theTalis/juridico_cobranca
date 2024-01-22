@@ -152,7 +152,7 @@
                                             <th scope="col">Pagador</th>
                                             <th scope="col">Situação</th>
                                             <th scope="col">Data vencimento</th>
-                                            <th scope="col">Data pagamento</th>
+                                            <th scope="col">Último contato</th>
                                             <th scope="col">Data inclusão</th>
                                         </tr>
                                     </thead>
@@ -218,9 +218,9 @@
                             <div class="card-body">
                                 <div class="tab-content">
                                     <div class="tab-pane active show" id="tabs-titulo_{{acordo.id}}" role="tabpanel">
-                                        <form method="post" action="{% url 'submit_update_acordo' %}">
+                                        <form method="post" action="{% url 'submit_update_titulo_acordo' %}">
                                             {% csrf_token %}
-                                            <input type="hidden" name="pagamento_id" value="{{ acordo.id }}">
+                                            <input type="hidden" name="titulo_id" value="{{ acordo.id }}">
 
                                             <div class="mb-3">
                                                 <label class="form-label" for="situacao">Situação</label>
@@ -231,6 +231,26 @@
                                                 </select>
 
                                                 <div class="mb-3">
+                                                    <label class="form-label" for="forma_contato">Forma contato</label>
+                                                    <select id="forma_contato" name="forma_contato" class="form-select" aria-label="Forma contato" required>
+                                                    <option value="">Selecione a forma de contato</option>
+                                                    {% for forma_contato in formas_contato %}
+                                                        <option value="{{ forma_contato.descricao }}" {% if forma_contato.descricao == acordo.forma_contato.descricao %} selected {% endif %}>{{ forma_contato.descricao }}</option>
+                                                    {% endfor %}
+                                                    </select>
+                                                </div>
+                    
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="contato">Contato</label>
+                                                    <input type="text" class="form-control" id="contato" name="contato" value="{{ acordo.contato }}">
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="contato_secundario">Contato Secundário</label>
+                                                    <input type="text" class="form-control" id="contato_secundario" name="contato_secundario" value="{{ acordo.contato_secundario|default:'' }}">
+                                                </div>
+
+                                                <div class="mb-3">
                                                     <label class="form-label" for="data_vencimento">Data vencimento</label>
                                                     <input type="date" class="form-control" name="data_vencimento" value="{{ acordo.data_vencimento_formatada|default:'' }}">
                                                 </div>
@@ -238,6 +258,17 @@
                                                 <div class="mb-3">
                                                     <label class="form-label" for="data_pagamento">Data pagamento</label>
                                                     <input type="date" class="form-control" name="data_pagamento" value="{{ acordo.data_pagamento_formatada|default:'' }}">
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="anexo">Anexo</label>
+                                                    <input type="file" name="anexo" class="form-control">
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    {% for anexo in acordo.anexos %}
+                                                        <a href="media/{{ anexo.arquivo }}" target="_blank">{{ anexo.descricao }}</a>
+                                                    {% endfor %}
                                                 </div>
                                             </div>
 

@@ -21,6 +21,7 @@ urlpatterns = [
     path('submit_cadastro', submit_cadastro, name="submit_cadastro"),
     path('submit_importacao', submit_importacao, name="submit_importacao"),
     path('submit_update_titulo', submit_update_titulo, name="submit_update_titulo"),
+    path('submit_update_titulo_acordo', submit_update_titulo_acordo, name="submit_update_titulo_acordo"),
 
     path('submit_update_pagamento', submit_update_pagamento, name="submit_update_pagamento"),
     path('submit_update_acordo', submit_update_acordo, name="submit_update_acordo"),

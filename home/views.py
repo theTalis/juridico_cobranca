@@ -212,6 +212,11 @@ def submit_update_titulo(request):
     messages.success(request, 'Cadastro atualizado com sucesso')
     return redirect('home')
 
+def submit_update_titulo_acordo(request):
+    upset_titulo(request)
+    messages.success(request, 'Cadastro atualizado com sucesso')
+    return redirect('acordo')
+
 def submit_update_pagamento(request):
     upset_pagamento(request)
     messages.success(request, 'Cadastro atualizado com sucesso')
@@ -313,12 +318,14 @@ def acordo(request):
             acordo.data_vencimento_formatada = DateFormat(acordo.data_vencimento)
             acordo.data_vencimento_formatada = acordo.data_vencimento_formatada.format('Y-m-d')
         acordo.observacoes = get_titulo_observacoes(acordo.id)
+        acordo.anexos = get_titulo_anexos(acordo.id)
 
     dados = {
         'acordos': acordos,
         'data_inicial': data_inicial,
         'data_final': data_final,
-        'situacoes': get_situacoes()
+        'situacoes': get_situacoes(),
+        "formas_contato": get_formas_contato()
     }
     return render(request, 'acordo.html', dados)
 
