@@ -208,7 +208,7 @@ def get_dados_pagamentos(data_inicial, data_final):
 
 def get_dados_acordos(data_inicial, data_final):
     situacoes = Situacao.objects.filter(descricao__in=['ACORDO EM ABERTO'])
-    titulos = Titulo.objects.filter(situacao__in=[situacao.descricao for situacao in situacoes], data_vencimento__gte=data_inicial, data_vencimento__lte=data_final).order_by('data_vencimento') | Titulo.objects.filter(situacao__in=[situacao.descricao for situacao in situacoes], data_vencimento=None).order_by('data_vencimento')
+    titulos = Titulo.objects.filter(situacao__in=[situacao.descricao for situacao in situacoes], data_vencimento=None).order_by('data_vencimento') | Titulo.objects.filter(situacao__in=[situacao.descricao for situacao in situacoes], data_vencimento__gte=data_inicial, data_vencimento__lte=data_final).order_by('data_vencimento')
     return titulos
 
 def get_dados_juridico_externo(data_inicial, data_final):
