@@ -308,7 +308,7 @@ def acordo(request):
 
     acordos = get_acordos(data_inicial, data_final)
     for acordo in acordos:
-        if acordo.forma_contato.descricao.upper() == 'WHATSAPP':
+        if acordo.forma_contato and acordo.forma_contato.descricao.upper() == 'WHATSAPP':
             acordo.whatsapp = get_whatsapp(acordo.sacado.nome, acordo.contato)
         if acordo.data_pagamento:
             acordo.data_pagamento_formatada = DateFormat(acordo.data_pagamento)
