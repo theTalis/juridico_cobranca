@@ -304,7 +304,7 @@
                                     </div>
 
                                     <div class="tab-pane" id="tabs-parcial_{{acordo.id}}" role="tabpanel">
-                                        <form method="post" action="{% url 'submit_pagamento_parcial_acordo' %}" enctype="multipart/form-data">
+                                        <form method="post" action="{% url 'submit_pagamento_parcial_acordo' %}">
                                             {% csrf_token %}
                                             <input type="hidden" name="titulo_id" value="{{ acordo.id }}">
 
@@ -316,7 +316,7 @@
 
                                                 <div class="mb-3">
                                                     <label class="form-label" for="valor_pagamento">Valor Pagamento</label>
-                                                    <input type="number" class="form-control" name="valor_pagamento" value="{{ valor_pagamento|default:'' }}">
+                                                    <input type="text" class="form-control" name="valor_pagamento" value="{{ acordo.valor_pagamento|default:'' }}">
                                                 </div>
                                             </div>
 
