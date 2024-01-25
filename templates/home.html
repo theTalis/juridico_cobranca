@@ -137,10 +137,10 @@
                                 
                                 <div class="col-2 p-2">
                                     <label class="form-label" for="situacao_filtro">Situação</label>
-                                    <select id="situacao" name="situacao_filtro" class="form-select" aria-label="Situação">
+                                    <select id="situacao_filtro" name="situacao_filtro" class="form-select" aria-label="Situação">
                                     <option value="">Todas</option>
-                                    {% for situacao in situacoes %}
-                                        <option value="{{ situacao.descricao }}" {% if situacao.descricao == situacao_filtro.descricao %} selected {% endif %}>{{ situacao.descricao }}</option>
+                                    {% for situacao_item in situacoes %}
+                                        <option value="{{ situacao_item.descricao }}" {% if situacao_item.descricao == situacao_filtro.descricao %} selected {% endif %}>{{ situacao_item.descricao }}</option>
                                     {% endfor %}
                                     </select>
                                 </div>
@@ -278,13 +278,13 @@
                             <div class="card-body">
                                 <div class="tab-content">
                                     <div class="tab-pane active show" id="tabs-titulo_{{titulo.id}}" role="tabpanel">
-                                        <form method="post" action="{% url 'submit_update_titulo' %}" enctype="multipart/form-data">
+                                        <form method="post" action="{% url 'submit_update_titulo_home' %}" enctype="multipart/form-data">
                                             {% csrf_token %}
                                             <input type="hidden" name="titulo_id" value="{{ titulo.id }}">
 
                                             <div class="mb-3">
                                                 <label class="form-label" for="situacao">Situação</label>
-                                                <select id="situacao" name="situacao" class="form-select" aria-label="Situação" required>
+                                                <select id="situacao" name="situacao" class="form-select" aria-label="Situação">
                                                 {% for situacao in situacoes %}
                                                     <option value="{{ situacao.descricao }}" {% if situacao.descricao == titulo.situacao.descricao %} selected {% endif %}>{{ situacao.descricao }}</option>
                                                 {% endfor %}
@@ -292,7 +292,7 @@
 
                                                 <div class="mb-3">
                                                     <label class="form-label" for="forma_contato">Forma contato</label>
-                                                    <select id="forma_contato" name="forma_contato" class="form-select" aria-label="Forma contato" required>
+                                                    <select id="forma_contato" name="forma_contato" class="form-select" aria-label="Forma contato">
                                                     <option value="">Selecione a forma de contato</option>
                                                     {% for forma_contato in formas_contato %}
                                                         <option value="{{ forma_contato.descricao }}" {% if forma_contato.descricao == titulo.forma_contato.descricao %} selected {% endif %}>{{ forma_contato.descricao }}</option>

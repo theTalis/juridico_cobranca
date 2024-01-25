@@ -224,7 +224,7 @@
 
                                             <div class="mb-3">
                                                 <label class="form-label" for="situacao">Situação</label>
-                                                <select id="situacao" name="situacao" class="form-select" aria-label="Situação" required>
+                                                <select id="situacao" name="situacao" class="form-select" aria-label="Situação">
                                                 {% for situacao in situacoes %}
                                                     <option value="{{ situacao.descricao }}" {% if situacao.descricao == acordo.situacao.descricao %} selected {% endif %}>{{ situacao.descricao }}</option>
                                                 {% endfor %}
@@ -232,7 +232,7 @@
 
                                                 <div class="mb-3">
                                                     <label class="form-label" for="forma_contato">Forma contato</label>
-                                                    <select id="forma_contato" name="forma_contato" class="form-select" aria-label="Forma contato" required>
+                                                    <select id="forma_contato" name="forma_contato" class="form-select" aria-label="Forma contato">
                                                     <option value="">Selecione a forma de contato</option>
                                                     {% for forma_contato in formas_contato %}
                                                         <option value="{{ forma_contato.descricao }}" {% if forma_contato.descricao == acordo.forma_contato.descricao %} selected {% endif %}>{{ forma_contato.descricao }}</option>
