@@ -85,7 +85,7 @@ def create_arquivo(filename):
     )
 
 def get_dados_titulos_em_aberto():
-    situacoes = Situacao.objects.filter(descricao__in=['EM ABERTO', 'ARQUIVO'])
+    situacoes = Situacao.objects.filter(descricao__in=['EM ABERTO', 'ARQUIVO', 'EM ABERTO - PRIORIDADE'])
     return Titulo.objects.filter(situacao__in=[situacao.descricao for situacao in situacoes]).order_by('data_vencimento')
 
 def get_dados_situacoes():
