@@ -40,7 +40,7 @@ admin.site.register(FormaContato, ListandoFormasContato)
 class ListandoTitulos(admin.ModelAdmin):
     list_display = ('cedente', 'sacado', 'valor')
     list_display_links = ('cedente', 'sacado', 'valor' )
-    search_fields = ('cedente', 'sacado', 'valor' )
+    search_fields = ('cedente__nome', 'sacado__nome')
     list_per_page = 30
     ordering = ('valor',)
     fields = ('cedente', 'sacado', 'valor', 'contato', 'contato_secundario', 'pagador', 'situacao', 'forma_contato', 'marcado',
