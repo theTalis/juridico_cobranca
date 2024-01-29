@@ -32,8 +32,8 @@ def home(request):
 
     titulos = get_titulos_em_aberto()
     for titulo in titulos:
-        if titulo.forma_contato and titulo.forma_contato.descricao.upper() == 'WHATSAPP' or not titulo.forma_contato:
-            titulo.whatsapp = get_whatsapp(titulo.sacado.nome, titulo.contato)
+        # if titulo.forma_contato and titulo.forma_contato.descricao.upper() == 'WHATSAPP' or not titulo.forma_contato:
+        titulo.whatsapp = get_whatsapp(titulo.sacado.nome, titulo.contato)
         if titulo.data_vencimento:
             titulo.data_vencimento_formatada = DateFormat(titulo.data_vencimento)
             titulo.data_vencimento_formatada = titulo.data_vencimento_formatada.format('Y-m-d')
