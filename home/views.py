@@ -17,7 +17,7 @@ def home(request):
     search = ''
     if 'search' in request.POST:
         search = request.POST['search']
-
+        
     valor_filtro = ''
     if 'valor_filtro' in request.POST:
         valor_filtro = request.POST['valor_filtro']
@@ -25,6 +25,11 @@ def home(request):
     situacao_filtro = ''
     if 'situacao_filtro' in request.POST:
         situacao_filtro = request.POST['situacao_filtro']
+
+    if situacao_filtro == '' and 'situacao_filtro' in request.session:
+        situacao_filtro = request.session['situacao_filtro']
+
+    request.session['situacao_filtro'] = situacao_filtro
 
     cedentes = []
     sacados = []
@@ -44,7 +49,7 @@ def home(request):
         
         has_value = len(search) > 0 and (str(search).lower() in str(titulo.cedente.nome).lower() or str(search).lower() in str(titulo.sacado.nome).lower())
         has_valor_filtro = len(valor_filtro) > 0 and float(valor_filtro) == float(titulo.valor)
-        has_situacao_filtro = len(situacao_filtro) > 0 and situacao_filtro == titulo.situacao.descricao
+        has_situacao_filtro = len(situacao_filtro) > 0 and situacao_filtro == titulo.situacao.descricao or situacao_filtro == 'TODAS'
 
         dados_sacado = {
             "cedente": titulo.cedente.nome,

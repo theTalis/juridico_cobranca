@@ -138,9 +138,9 @@
                                 <div class="col-2 p-2">
                                     <label class="form-label" for="situacao_filtro">Situação</label>
                                     <select id="situacao_filtro" name="situacao_filtro" class="form-select" aria-label="Situação">
-                                    <option value="">Todas</option>
+                                    <option value="TODAS">Todas</option>
                                     {% for situacao_item in situacoes %}
-                                        <option value="{{ situacao_item.descricao }}" {% if situacao_item.descricao == situacao_filtro.descricao %} selected {% endif %}>{{ situacao_item.descricao }}</option>
+                                        <option value="{{ situacao_item.descricao }}" {% if situacao_item.descricao == situacao_filtro %} selected {% endif %}>{{ situacao_item.descricao }}</option>
                                     {% endfor %}
                                     </select>
                                 </div>
