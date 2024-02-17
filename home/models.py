@@ -68,6 +68,8 @@ class Titulo(models.Model):
     sacado = models.ForeignKey(Sacado, on_delete=models.CASCADE)
     cpf_cnpj = models.CharField(max_length=30, null=True, blank=True)
     valor = models.FloatField(null=True, blank=True)
+    encargo = models.FloatField(null=True, blank=True)
+    valor_face = models.FloatField(null=True, blank=True)
     contato = models.CharField(max_length=100, null=True, blank=True)
     contato_secundario = models.CharField(max_length=300, null=True, blank=True)
     pagador = models.CharField(choices=Pagador.choices, default=Pagador.CEDENTE, max_length=20, null=True, blank=True)

@@ -116,6 +116,12 @@ def update_titulo(request):
         titulo.data_pagamento = request.POST['data_pagamento']
     if len(request.POST['data_vencimento']) > 0:
         titulo.data_vencimento = request.POST['data_vencimento']
+
+    if len(request.POST['valor_encargo']) > 0:
+        titulo.valor_face = titulo.valor
+        titulo.encargo = float(str(request.POST['valor_encargo']).replace(',', '.'))
+        titulo.valor = float(titulo.valor) + float(str(request.POST['valor_encargo']).replace(',', '.'))
+
     titulo.save()
     
     if "anexo" in request.FILES:
@@ -143,6 +149,11 @@ def update_pagamento(request):
         titulo.data_vencimento = request.POST['data_vencimento']
     else:
         titulo.data_vencimento = None
+
+    if len(request.POST['valor_encargo']) > 0:
+        titulo.valor_face = titulo.valor
+        titulo.encargo = float(str(request.POST['valor_encargo']).replace(',', '.'))
+        titulo.valor = float(titulo.valor) + float(str(request.POST['valor_encargo']).replace(',', '.'))
 
     titulo.save()
 

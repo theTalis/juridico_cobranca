@@ -176,6 +176,8 @@
                                             <th scope="col"></th>
                                             <th scope="col">Id</th>
                                             <th scope="col">Valor</th>
+                                            <th scope="col">Valor Face</th>
+                                            <th scope="col">Encargo</th>
                                             <th scope="col">Contato</th>
                                             <th scope="col">Forma de contato</th>
                                             <th scope="col">Pagador</th>
@@ -216,6 +218,12 @@
                                             </th>
                                             <td class="{{ titulo.valor }}">
                                                 R$ {{ titulo.valor|floatformat:2 }}
+                                            </td>
+                                            <td class="{{ titulo.valor_face }}">
+                                                R$ {{ titulo.valor_face|floatformat:2 }}
+                                            </td>
+                                            <td class="{{ titulo.encargo }}">
+                                                R$ {{ titulo.encargo|floatformat:2 }}
                                             </td>
                                             <td>
                                                 <a href="{{ titulo.whatsapp }}" target="_blank">
@@ -318,6 +326,11 @@
                                                 <div class="mb-3">
                                                     <label class="form-label" for="data_pagamento">Data pagamento</label>
                                                     <input type="date" class="form-control" name="data_pagamento" value="{{ titulo.data_pagamento_formatada|default:'' }}">
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="valor_encargo">Valor Encargo</label>
+                                                    <input type="text" class="form-control" name="valor_encargo" value="{{ titulo.encargo|default:'' }}">
                                                 </div>
 
                                                 <div class="mb-3">
