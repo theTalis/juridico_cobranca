@@ -28,6 +28,18 @@ def get_dados_formas_contato():
     except FormaContato.DoesNotExist:
         return "Formas de contato não encontrados"
     
+def get_dados_supervisores():
+    try:
+        return Supervisor.objects.all()
+    except Supervisor.DoesNotExist:
+        return "Supervisor não encontrados"
+    
+def get_dados_operadores():
+    try:
+        return Operador.objects.all()
+    except Operador.DoesNotExist:
+        return "Operador não encontrados"
+    
 def create_titulo(request, params):
     try:
         cedente = Cedente.objects.filter(nome=params['cedente']).first()
@@ -110,17 +122,38 @@ def update_titulo(request):
     titulo = Titulo.objects.get(pk=request.POST['titulo_id'])
     titulo.situacao = situacao
     titulo.forma_contato = forma_contato
+
+    if len(request.POST['supervisor']) > 0:
+        supervisor = Supervisor.objects.get(nome=request.POST['supervisor'])
+        titulo.supervisor = supervisor
+    else:
+        titulo.supervisor = None
+
+    if len(request.POST['operador']) > 0:
+        operador = Operador.objects.get(nome=request.POST['operador'])
+        titulo.operador = operador
+    else:
+        titulo.operador = None
+
     titulo.contato = request.POST['contato']
     titulo.contato_secundario = request.POST['contato_secundario']
     if len(request.POST['data_pagamento']) > 0:
         titulo.data_pagamento = request.POST['data_pagamento']
+    else:
+        titulo.data_pagamento = None
+
     if len(request.POST['data_vencimento']) > 0:
         titulo.data_vencimento = request.POST['data_vencimento']
+    else:
+        titulo.data_vencimento = None
 
     if len(request.POST['valor_encargo']) > 0:
         titulo.valor_face = titulo.valor
         titulo.encargo = float(str(request.POST['valor_encargo']).replace(',', '.'))
         titulo.valor = float(titulo.valor) + float(str(request.POST['valor_encargo']).replace(',', '.'))
+    else:
+        titulo.encargo = 0
+        titulo.valor = titulo.valor_face
 
     titulo.save()
     
@@ -198,6 +231,10 @@ def create_pagamento_parcial(request, is_acordo):
         
         titulo_parcial = Titulo.objects.get(pk=request.POST['titulo_id'])
         titulo_parcial.pk = None
+
+        if len(request.POST['pagador']) > 0:
+            titulo_parcial.pagador = request.POST['pagador']
+
         titulo_parcial.situacao = situacao
         titulo_parcial.data_pagamento = data_pagamento
         titulo_parcial.valor = valor_pagamento
@@ -214,7 +251,7 @@ def get_dados_titulo_observacoes(titulo_id):
 
 def get_dados_pagamentos(data_inicial, data_final):
     situacoes = Situacao.objects.filter(descricao__in=['PAGO', 'ACORDO PAGO'])
-    titulos = Titulo.objects.filter(situacao__in=[situacao.descricao for situacao in situacoes], data_pagamento__gte=data_inicial, data_pagamento__lte=data_final).order_by('-updated_at') | Titulo.objects.filter(situacao__in=[situacao.descricao for situacao in situacoes], data_pagamento=None).order_by('-updated_at')
+    titulos = Titulo.objects.filter(situacao__in=[situacao.descricao for situacao in situacoes], data_pagamento__gte=data_inicial, data_pagamento__lte=data_final).order_by('-data_pagamento') | Titulo.objects.filter(situacao__in=[situacao.descricao for situacao in situacoes], data_pagamento=None).order_by('-data_pagamento')
     return titulos
 
 def get_dados_acordos(data_inicial, data_final):

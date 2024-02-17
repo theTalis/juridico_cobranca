@@ -19,6 +19,24 @@ class ListandoSacados(admin.ModelAdmin):
     fields = ('nome', 'contato', )    
 admin.site.register(Sacado, ListandoSacados)
 
+class ListandoSupervisores(admin.ModelAdmin):
+    list_display = ('id', 'nome', )
+    list_display_links = ('id', 'nome')
+    search_fields = ('nome', )
+    list_per_page = 30
+    ordering = ('nome',)
+    fields = ('nome', )    
+admin.site.register(Supervisor, ListandoSupervisores)
+
+class ListandoOperadores(admin.ModelAdmin):
+    list_display = ('id', 'nome', )
+    list_display_links = ('id', 'nome')
+    search_fields = ('nome', )
+    list_per_page = 30
+    ordering = ('nome',)
+    fields = ('nome', )    
+admin.site.register(Operador, ListandoOperadores)
+
 class ListandoSituacoes(admin.ModelAdmin):
     list_display = ('descricao', )
     list_display_links = ('descricao', )

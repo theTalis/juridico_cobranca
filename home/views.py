@@ -68,13 +68,16 @@ def home(request):
     dados = {
         'cedentes': cedentes,
         'sacados': sacados,
+        "pagadores": get_pagadores(),
         'titulos': filtered_titulos,
         'links': get_links(),
         'search': search,
         'valor_filtro': valor_filtro,
         'situacao_filtro': situacao_filtro,
         'situacoes': get_situacoes(),
-        "formas_contato": get_formas_contato()
+        "formas_contato": get_formas_contato(),
+        "supervisores": get_supervisores(),
+        "operadores": get_operadores()
     }
     return render(request, 'home.html', dados)
 
@@ -276,9 +279,16 @@ def pagamento(request):
 
     quantidade_pagamentos = 0
     valor_pago = 0
+    valores_face = 0
+    encargos = 0
     for pagamento in pagamentos:
         quantidade_pagamentos += 1
         valor_pago += pagamento.valor
+        if pagamento.valor_face:
+            valores_face += float(pagamento.valor_face)
+
+        if pagamento.encargo:
+            encargos += float(pagamento.encargo)
 
         if pagamento.data_pagamento:
             pagamento.data_pagamento_formatada = DateFormat(pagamento.data_pagamento)
@@ -288,6 +298,8 @@ def pagamento(request):
         'pagamentos': pagamentos,
         'quantidade_pagamentos': quantidade_pagamentos,
         'valor_pago': valor_pago,
+        'valores_face': valores_face,
+        'encargos': encargos,
         'data_inicial': data_inicial,
         'data_final': data_final,
         'situacoes': get_situacoes()
@@ -310,6 +322,9 @@ def acordo(request):
     if 'data_final' in request.POST:
         data_final = request.POST['data_final']
 
+    cedentes = []
+    sacados = []
+
     acordos = get_acordos(data_inicial, data_final)
     for acordo in acordos:
         acordo.whatsapp = get_whatsapp(acordo.sacado.nome, acordo.contato)
@@ -322,13 +337,27 @@ def acordo(request):
             acordo.data_vencimento_formatada = acordo.data_vencimento_formatada.format('Y-m-d')
         acordo.observacoes = get_titulo_observacoes(acordo.id)
         acordo.anexos = get_titulo_anexos(acordo.id)
+    
+        if not acordo.cedente.nome in cedentes:
+            cedentes.append(acordo.cedente.nome)
+
+        dados_sacado = {
+            "cedente": acordo.cedente.nome,
+            "sacado": acordo.sacado.nome
+        }
+        if not dados_sacado in sacados:
+            sacados.append(dados_sacado)
 
     dados = {
+        'cedentes': cedentes,
+        'sacados': sacados,
         'acordos': acordos,
         'data_inicial': data_inicial,
         'data_final': data_final,
         'situacoes': get_situacoes(),
-        "formas_contato": get_formas_contato()
+        "formas_contato": get_formas_contato(),
+        "supervisores": get_supervisores(),
+        "operadores": get_operadores()
     }
     return render(request, 'acordo.html', dados)
 

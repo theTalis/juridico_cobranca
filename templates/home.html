@@ -178,8 +178,10 @@
                                             <th scope="col">Valor</th>
                                             <th scope="col">Valor Face</th>
                                             <th scope="col">Encargo</th>
+                                            <th scope="col">Supervisor</th>
+                                            <th scope="col">Operador</th>
                                             <th scope="col">Contato</th>
-                                            <th scope="col">Forma de contato</th>
+                                            <th scope="col">Registro</th>
                                             <th scope="col">Pagador</th>
                                             <th scope="col">Situação</th>
                                             <th scope="col">Data vencimento</th>
@@ -194,14 +196,14 @@
                                         {% for cedente in cedentes %}
 
                                         <tr class="header">
-                                            <td>Cedente - {{ cedente }}</td>
+                                            <td>Cedente - {{ cedente|slice:"0:20" }}</td>
                                         </tr>
 
                                         {% for sacado in sacados %}
                                         
                                         {% if sacado.cedente == cedente %}
                                         <tr class="subheader" style="display: none">
-                                            <td>Sacado - {{ sacado.sacado }}</td>
+                                            <td>Sacado - {{ sacado.sacado|slice:"0:20" }}</td>
                                         </tr>
 
                                         {% for titulo in titulos %}
@@ -225,6 +227,8 @@
                                             <td class="{{ titulo.encargo }}">
                                                 R$ {{ titulo.encargo|floatformat:2 }}
                                             </td>
+                                            <td>{{ titulo.supervisor.nome }}</td>
+                                            <td>{{ titulo.operador.nome }}</td>
                                             <td>
                                                 <a href="{{ titulo.whatsapp }}" target="_blank">
                                                     {{ titulo.contato }}
@@ -307,6 +311,26 @@
                                                     {% endfor %}
                                                     </select>
                                                 </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="supervisor">Supervisor</label>
+                                                    <select id="supervisor" name="supervisor" class="form-select" aria-label="Supervisor">
+                                                    <option value="">Selecione o supervisor</option>
+                                                    {% for supervisor in supervisores %}
+                                                        <option value="{{ supervisor.nome }}" {% if supervisor.nome == titulo.supervisor.nome %} selected {% endif %}>{{ supervisor.nome }}</option>
+                                                    {% endfor %}
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="operador">Operador</label>
+                                                    <select id="operador" name="operador" class="form-select" aria-label="Operador">
+                                                    <option value="">Selecione o operador</option>
+                                                    {% for operador in operadores %}
+                                                        <option value="{{ operador.nome }}" {% if operador.nome == titulo.operador.nome %} selected {% endif %}>{{ operador.nome }}</option>
+                                                    {% endfor %}
+                                                    </select>
+                                                </div>
                     
                                                 <div class="mb-3">
                                                     <label class="form-label" for="contato">Contato</label>
@@ -352,7 +376,6 @@
                                         </form>
                                     </div>
 
-
                                     <div class="tab-pane" id="tabs-observacoes_{{titulo.id}}" role="tabpanel">
                                         <form method="post" action="{% url 'submit_update_observacoes' %}" enctype="multipart/form-data">
                                             {% csrf_token %}
@@ -391,6 +414,17 @@
                                                 <div class="mb-3">
                                                     <label class="form-label" for="valor_pagamento">Valor Pagamento</label>
                                                     <input type="text" class="form-control" name="valor_pagamento" value="{{ titulo.valor_pagamento|default:'' }}">
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="pagador">Pagador</label>
+                                                    <select name="pagador" class="form-select" aria-label="Pagador" required>
+                                                    <option value="">Selecione o pagador</option>
+                                                    {% for value, text  in pagadores %}
+                                                        {% comment %} <option value="{{ value }}">{{ text }}</option> {% endcomment %}
+                                                        <option value="{{ value }}" {% if text == titulo.pagador %} selected {% endif %}>{{ text }}</option>
+                                                    {% endfor %}
+                                                    </select>
                                                 </div>
                                             </div>
 
