@@ -22,6 +22,14 @@ def home(request):
     if 'valor_filtro' in request.POST:
         valor_filtro = request.POST['valor_filtro']
 
+    supervisor_filtro = ''
+    if 'supervisor_filtro' in request.POST:
+        supervisor_filtro = request.POST['supervisor_filtro']
+
+    operador_filtro = ''
+    if 'operador_filtro' in request.POST:
+        operador_filtro = request.POST['operador_filtro']
+
     situacao_filtro = ''
     if 'situacao_filtro' in request.POST:
         situacao_filtro = request.POST['situacao_filtro']
@@ -46,17 +54,34 @@ def home(request):
             titulo.data_pagamento_formatada = titulo.data_pagamento_formatada.format('Y-m-d')
         titulo.anexos = get_titulo_anexos(titulo.id)
         titulo.observacoes = get_titulo_observacoes(titulo.id)
-        
+
+        if valor_filtro:
+            valor_filtro = float(valor_filtro)
+
+        valor_titulo = 0
+        if titulo.valor:
+            valor_titulo = float(titulo.valor)
+
+        supervisor_titulo = ''
+        if titulo.supervisor:
+            supervisor_titulo = titulo.supervisor.nome
+
+        operador_titulo = ''
+        if titulo.operador:
+            operador_titulo = titulo.operador.nome
+
         has_value = len(search) > 0 and (str(search).lower() in str(titulo.cedente.nome).lower() or str(search).lower() in str(titulo.sacado.nome).lower())
-        has_valor_filtro = len(valor_filtro) > 0 and float(valor_filtro) == float(titulo.valor)
+        has_valor_filtro = valor_filtro == valor_titulo
         has_situacao_filtro = len(situacao_filtro) > 0 and situacao_filtro == titulo.situacao.descricao or situacao_filtro == 'TODAS'
+        has_supervisor_filtro = len(supervisor_filtro) > 0 and supervisor_filtro == supervisor_titulo or supervisor_filtro == 'TODOS'
+        has_operador_filtro = len(operador_filtro) > 0 and operador_filtro == operador_titulo or operador_filtro == 'TODOS'
 
         dados_sacado = {
             "cedente": titulo.cedente.nome,
             "sacado": titulo.sacado.nome
         }
 
-        if (not search or has_value) and (not valor_filtro or has_valor_filtro) and (not situacao_filtro or has_situacao_filtro):
+        if (not search or has_value) and (not valor_filtro or has_valor_filtro) and (not situacao_filtro or has_situacao_filtro) and (not supervisor_filtro or has_supervisor_filtro) and (not operador_filtro or has_operador_filtro):
             if not titulo.cedente.nome in cedentes:
                 cedentes.append(titulo.cedente.nome)
             
@@ -73,6 +98,8 @@ def home(request):
         'links': get_links(),
         'search': search,
         'valor_filtro': valor_filtro,
+        'supervisor_filtro': supervisor_filtro,
+        'operador_filtro': operador_filtro,
         'situacao_filtro': situacao_filtro,
         'situacoes': get_situacoes(),
         "formas_contato": get_formas_contato(),
@@ -286,6 +313,8 @@ def pagamento(request):
         valor_pago += pagamento.valor
         if pagamento.valor_face:
             valores_face += float(pagamento.valor_face)
+        else:
+            valores_face += float(pagamento.valor)
 
         if pagamento.encargo:
             encargos += float(pagamento.encargo)

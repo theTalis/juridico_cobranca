@@ -61,7 +61,7 @@ class ListandoTitulos(admin.ModelAdmin):
     search_fields = ('cedente__nome', 'sacado__nome')
     list_per_page = 30
     ordering = ('valor',)
-    fields = ('cedente', 'sacado', 'valor', 'contato', 'contato_secundario', 'pagador', 'situacao', 'forma_contato', 'marcado',
+    fields = ('cedente', 'sacado', 'supervisor', 'operador', 'valor', 'valor_face', 'encargo', 'contato', 'contato_secundario', 'pagador', 'situacao', 'forma_contato', 'marcado',
         'data_vencimento', 'data_pagamento', 'usuario', )    
 admin.site.register(Titulo, ListandoTitulos)
 

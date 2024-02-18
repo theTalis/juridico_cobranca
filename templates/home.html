@@ -146,8 +146,28 @@
                                 </div>
 
                                 <div class="col-2 p-2">
+                                    <label class="form-label" for="supervisor_filtro">Supervisor</label>
+                                    <select id="supervisor_filtro" name="supervisor_filtro" class="form-select" aria-label="Supervisor">
+                                    <option value="TODOS">Todos</option>
+                                    {% for supervisor_item in supervisores %}
+                                        <option value="{{ supervisor_item.nome }}" {% if supervisor_item.nome == supervisor_filtro %} selected {% endif %}>{{ supervisor_item.nome }}</option>
+                                    {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="col-2 p-2">
+                                    <label class="form-label" for="operador_filtro">Operador</label>
+                                    <select id="operador_filtro" name="operador_filtro" class="form-select" aria-label="Operador">
+                                    <option value="TODOS">Todos</option>
+                                    {% for operador_item in operadores %}
+                                        <option value="{{ operador_item.nome }}" {% if operador_item.nome == operador_filtro %} selected {% endif %}>{{ operador_item.nome }}</option>
+                                    {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="col-2 p-2">
                                     <label class="form-label" for="valor_filtro">Valor</label>
-                                    <input type="number" class="form-control" name="valor_filtro" value="{{ valor_filtro|default:'' }}">
+                                    <input type="number" step="0.01" class="form-control" name="valor_filtro" value="{{ valor_filtro|default:'' }}">
                                 </div>
 
                                 <div class="col-2 p-5">
