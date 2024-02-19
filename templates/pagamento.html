@@ -165,6 +165,32 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">Encargos</div>
+                                    </div>
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="h1 mt-3 mb-4 me-2">R$ {{ encargos|floatformat:2 }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">Valor de Face</div>
+                                    </div>
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="h1 mt-3 mb-4 me-2">R$ {{ valores_face|floatformat:2 }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="col-12 mt-3">
@@ -176,10 +202,9 @@
                                             <th scope="col">Cedente</th>
                                             <th scope="col">Sacado</th>
                                             <th scope="col">Valor</th>
-                                            <th scope="col">Contato</th>
-                                            <th scope="col">Forma de contato</th>
+                                            <th scope="col">Valor Face</th>
+                                            <th scope="col">Encargo</th>
                                             <th scope="col">Pagador</th>
-                                            <th scope="col">Situação</th>
                                             <th scope="col">Data vencimento</th>
                                             <th scope="col">Data pagamento</th>
                                             <th scope="col">Data inclusão</th>
@@ -196,10 +221,9 @@
                                             <td>{{ pagamento.cedente }}</td>
                                             <td>{{ pagamento.sacado }}</td>
                                             <td class="{{ pagamento.valor }}">R$ {{ pagamento.valor|floatformat:2 }}</td>
-                                            <td>{{ pagamento.contato }}</td>
-                                            <td>{{ pagamento.forma_contato }}</td>
+                                            <td class="{{ pagamento.valor_face }}">R$ {{ pagamento.valor_face|floatformat:2 }}</td>
+                                            <td class="{{ pagamento.encargo }}">R$ {{ pagamento.encargo|floatformat:2 }}</td>
                                             <td>{{ pagamento.pagador }}</td>
-                                            <td>{{ pagamento.situacao }}</td>
                                             <td>{{ pagamento.data_vencimento|default:'' }}</td>
                                             <td>{{ pagamento.data_pagamento|default:'' }}</td>
                                             <td>{{ pagamento.created_at }}</td>
@@ -239,6 +263,11 @@
                                 <div class="mb-3">
                                     <label class="form-label" for="data_pagamento">Data pagamento</label>
                                     <input type="date" class="form-control" name="data_pagamento" value="{{ pagamento.data_pagamento_formatada|default:'' }}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="valor_encargo">Valor Encargo</label>
+                                    <input type="text" class="form-control" name="valor_encargo" value="{{ pagamento.encargo|default:'' }}">
                                 </div>
                             </div>
 

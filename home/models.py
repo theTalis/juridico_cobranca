@@ -26,6 +26,26 @@ class Sacado(models.Model):
     deleted_at = models.DateTimeField(null=True, blank=True)
     def __str__(self):
         return self.nome
+    
+class Supervisor(models.Model):
+    class Meta:
+        db_table = 'supervisor'
+    nome = models.CharField(max_length=60)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+    def __str__(self):
+        return self.nome
+    
+class Operador(models.Model):
+    class Meta:
+        db_table = 'operador'
+    nome = models.CharField(max_length=60)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+    def __str__(self):
+        return self.nome
 
 class Pagador(models.TextChoices):
     CEDENTE = 'CEDENTE', _('Cedente')
@@ -68,11 +88,15 @@ class Titulo(models.Model):
     sacado = models.ForeignKey(Sacado, on_delete=models.CASCADE)
     cpf_cnpj = models.CharField(max_length=30, null=True, blank=True)
     valor = models.FloatField(null=True, blank=True)
+    encargo = models.FloatField(null=True, blank=True)
+    valor_face = models.FloatField(null=True, blank=True)
     contato = models.CharField(max_length=100, null=True, blank=True)
     contato_secundario = models.CharField(max_length=300, null=True, blank=True)
     pagador = models.CharField(choices=Pagador.choices, default=Pagador.CEDENTE, max_length=20, null=True, blank=True)
     situacao = models.ForeignKey(Situacao, on_delete=models.CASCADE, null=True, blank=True)
     forma_contato = models.ForeignKey(FormaContato, on_delete=models.CASCADE, null=True, blank=True)
+    supervisor = models.ForeignKey(Supervisor, on_delete=models.CASCADE, null=True, blank=True)
+    operador = models.ForeignKey(Operador, on_delete=models.CASCADE, null=True, blank=True)
     data_vencimento = models.DateField(null=True, blank=True)
     data_protesto = models.DateField(null=True, blank=True)
     data_pagamento = models.DateField(null=True, blank=True)

@@ -19,6 +19,24 @@ class ListandoSacados(admin.ModelAdmin):
     fields = ('nome', 'contato', )    
 admin.site.register(Sacado, ListandoSacados)
 
+class ListandoSupervisores(admin.ModelAdmin):
+    list_display = ('id', 'nome', )
+    list_display_links = ('id', 'nome')
+    search_fields = ('nome', )
+    list_per_page = 30
+    ordering = ('nome',)
+    fields = ('nome', )    
+admin.site.register(Supervisor, ListandoSupervisores)
+
+class ListandoOperadores(admin.ModelAdmin):
+    list_display = ('id', 'nome', )
+    list_display_links = ('id', 'nome')
+    search_fields = ('nome', )
+    list_per_page = 30
+    ordering = ('nome',)
+    fields = ('nome', )    
+admin.site.register(Operador, ListandoOperadores)
+
 class ListandoSituacoes(admin.ModelAdmin):
     list_display = ('descricao', )
     list_display_links = ('descricao', )
@@ -43,7 +61,7 @@ class ListandoTitulos(admin.ModelAdmin):
     search_fields = ('cedente__nome', 'sacado__nome')
     list_per_page = 30
     ordering = ('valor',)
-    fields = ('cedente', 'sacado', 'valor', 'contato', 'contato_secundario', 'pagador', 'situacao', 'forma_contato', 'marcado',
+    fields = ('cedente', 'sacado', 'supervisor', 'operador', 'valor', 'valor_face', 'encargo', 'contato', 'contato_secundario', 'pagador', 'situacao', 'forma_contato', 'marcado',
         'data_vencimento', 'data_pagamento', 'usuario', )    
 admin.site.register(Titulo, ListandoTitulos)
 

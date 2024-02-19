@@ -146,8 +146,28 @@
                                 </div>
 
                                 <div class="col-2 p-2">
+                                    <label class="form-label" for="supervisor_filtro">Supervisor</label>
+                                    <select id="supervisor_filtro" name="supervisor_filtro" class="form-select" aria-label="Supervisor">
+                                    <option value="TODOS">Todos</option>
+                                    {% for supervisor_item in supervisores %}
+                                        <option value="{{ supervisor_item.nome }}" {% if supervisor_item.nome == supervisor_filtro %} selected {% endif %}>{{ supervisor_item.nome }}</option>
+                                    {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="col-2 p-2">
+                                    <label class="form-label" for="operador_filtro">Operador</label>
+                                    <select id="operador_filtro" name="operador_filtro" class="form-select" aria-label="Operador">
+                                    <option value="TODOS">Todos</option>
+                                    {% for operador_item in operadores %}
+                                        <option value="{{ operador_item.nome }}" {% if operador_item.nome == operador_filtro %} selected {% endif %}>{{ operador_item.nome }}</option>
+                                    {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="col-2 p-2">
                                     <label class="form-label" for="valor_filtro">Valor</label>
-                                    <input type="number" class="form-control" name="valor_filtro" value="{{ valor_filtro|default:'' }}">
+                                    <input type="number" step="0.01" class="form-control" name="valor_filtro" value="{{ valor_filtro|default:'' }}">
                                 </div>
 
                                 <div class="col-2 p-5">
@@ -176,8 +196,12 @@
                                             <th scope="col"></th>
                                             <th scope="col">Id</th>
                                             <th scope="col">Valor</th>
+                                            <th scope="col">Valor Face</th>
+                                            <th scope="col">Encargo</th>
+                                            <th scope="col">Supervisor</th>
+                                            <th scope="col">Operador</th>
                                             <th scope="col">Contato</th>
-                                            <th scope="col">Forma de contato</th>
+                                            <th scope="col">Registro</th>
                                             <th scope="col">Pagador</th>
                                             <th scope="col">Situação</th>
                                             <th scope="col">Data vencimento</th>
@@ -192,14 +216,14 @@
                                         {% for cedente in cedentes %}
 
                                         <tr class="header">
-                                            <td>Cedente - {{ cedente }}</td>
+                                            <td>Cedente - {{ cedente|slice:"0:20" }}</td>
                                         </tr>
 
                                         {% for sacado in sacados %}
                                         
                                         {% if sacado.cedente == cedente %}
                                         <tr class="subheader" style="display: none">
-                                            <td>Sacado - {{ sacado.sacado }}</td>
+                                            <td>Sacado - {{ sacado.sacado|slice:"0:20" }}</td>
                                         </tr>
 
                                         {% for titulo in titulos %}
@@ -217,6 +241,14 @@
                                             <td class="{{ titulo.valor }}">
                                                 R$ {{ titulo.valor|floatformat:2 }}
                                             </td>
+                                            <td class="{{ titulo.valor_face }}">
+                                                R$ {{ titulo.valor_face|floatformat:2 }}
+                                            </td>
+                                            <td class="{{ titulo.encargo }}">
+                                                R$ {{ titulo.encargo|floatformat:2 }}
+                                            </td>
+                                            <td>{{ titulo.supervisor.nome }}</td>
+                                            <td>{{ titulo.operador.nome }}</td>
                                             <td>
                                                 <a href="{{ titulo.whatsapp }}" target="_blank">
                                                     {{ titulo.contato }}
@@ -254,34 +286,35 @@
         <div class="modal" id="modal_titulo_{{titulo.id}}" tabindex="-1">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">{{titulo.cedente}} - {{titulo.sacado}} | R$ {{ titulo.valor|floatformat:2  }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
+                    <form method="post" action="{% url 'submit_update_titulo' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h5 class="modal-title">{{titulo.cedente}} - {{titulo.sacado}} | R$ {{ titulo.valor|floatformat:2  }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
 
-                    <div class="modal-body">
-                        <div class="card">
-                            <div class="card-header">
-                                <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" role="tablist">
-                                    <li class="nav-item" role="presentation">
-                                        <a href="#tabs-titulo_{{titulo.id}}" class="nav-link active" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">Título</a>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <a href="#tabs-observacoes_{{titulo.id}}" class="nav-link" data-bs-toggle="tab" aria-selected="true" role="tab">Observações</a>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <a href="#tabs-parcial_{{titulo.id}}" class="nav-link" data-bs-toggle="tab" aria-selected="true" role="tab">Pagto. parcial</a>
-                                    </li>
-                                </ul>
-                            </div>
+                        <div class="modal-body">
 
-                            <div class="card-body">
-                                <div class="tab-content">
-                                    <div class="tab-pane active show" id="tabs-titulo_{{titulo.id}}" role="tabpanel">
-                                        <form method="post" action="{% url 'submit_update_titulo' %}" enctype="multipart/form-data">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="titulo_id" value="{{ titulo.id }}">
+                            <input type="hidden" name="titulo_id" value="{{ titulo.id }}">
 
+                            <div class="card">
+                                <div class="card-header">
+                                    <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <a href="#tabs-titulo_{{titulo.id}}" class="nav-link active" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">Título</a>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <a href="#tabs-observacoes_{{titulo.id}}" class="nav-link" data-bs-toggle="tab" aria-selected="true" role="tab">Observações</a>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <a href="#tabs-parcial_{{titulo.id}}" class="nav-link" data-bs-toggle="tab" aria-selected="true" role="tab">Pagto. parcial</a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="card-body">
+                                    <div class="tab-content">
+                                        <div class="tab-pane active show" id="tabs-titulo_{{titulo.id}}" role="tabpanel">
                                             <div class="mb-3">
                                                 <label class="form-label" for="situacao">Situação</label>
                                                 <select id="situacao" name="situacao" class="form-select" aria-label="Situação">
@@ -296,6 +329,26 @@
                                                     <option value="">Selecione a forma de contato</option>
                                                     {% for forma_contato in formas_contato %}
                                                         <option value="{{ forma_contato.descricao }}" {% if forma_contato.descricao == titulo.forma_contato.descricao %} selected {% endif %}>{{ forma_contato.descricao }}</option>
+                                                    {% endfor %}
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="supervisor">Supervisor</label>
+                                                    <select id="supervisor" name="supervisor" class="form-select" aria-label="Supervisor">
+                                                    <option value="">Selecione o supervisor</option>
+                                                    {% for supervisor in supervisores %}
+                                                        <option value="{{ supervisor.nome }}" {% if supervisor.nome == titulo.supervisor.nome %} selected {% endif %}>{{ supervisor.nome }}</option>
+                                                    {% endfor %}
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="operador">Operador</label>
+                                                    <select id="operador" name="operador" class="form-select" aria-label="Operador">
+                                                    <option value="">Selecione o operador</option>
+                                                    {% for operador in operadores %}
+                                                        <option value="{{ operador.nome }}" {% if operador.nome == titulo.operador.nome %} selected {% endif %}>{{ operador.nome }}</option>
                                                     {% endfor %}
                                                     </select>
                                                 </div>
@@ -321,6 +374,11 @@
                                                 </div>
 
                                                 <div class="mb-3">
+                                                    <label class="form-label" for="valor_encargo">Valor Encargo</label>
+                                                    <input type="text" class="form-control" name="valor_encargo" value="{{ titulo.encargo|default:'' }}">
+                                                </div>
+
+                                                <div class="mb-3">
                                                     <label class="form-label" for="anexo">Anexo</label>
                                                     <input type="file" name="anexo" class="form-control">
                                                 </div>
@@ -331,20 +389,9 @@
                                                     {% endfor %}
                                                 </div>
                                             </div>
+                                        </div>
 
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn me-auto" data-bs-dismiss="modal">Fechar</button>
-                                                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Confirmar alterações</button>
-                                            </div>
-                                        </form>
-                                    </div>
-
-
-                                    <div class="tab-pane" id="tabs-observacoes_{{titulo.id}}" role="tabpanel">
-                                        <form method="post" action="{% url 'submit_update_observacoes' %}" enctype="multipart/form-data">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="titulo_id" value="{{ titulo.id }}">
-
+                                        <div class="tab-pane" id="tabs-observacoes_{{titulo.id}}" role="tabpanel">
                                             <div class="mb-3">
                                                 <div class="mb-3">
                                                     <textarea class="form-control" name="observacao" rows="3" placeholder="Inclua uma nova observação"></textarea>
@@ -356,18 +403,9 @@
                                                     {% endfor %}
                                                 </div>
                                             </div>
+                                        </div>
 
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn me-auto" data-bs-dismiss="modal">Fechar</button>
-                                                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Confirmar observações</button>
-                                            </div>
-                                        </form>
-                                    </div>
-
-                                    <div class="tab-pane" id="tabs-parcial_{{titulo.id}}" role="tabpanel">
-                                        <form method="post" action="{% url 'submit_pagamento_parcial' %}">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="titulo_id" value="{{ titulo.id }}">
+                                        <div class="tab-pane" id="tabs-parcial_{{titulo.id}}" role="tabpanel">
 
                                             <div class="mb-3">
                                                 <div class="mb-3">
@@ -379,18 +417,29 @@
                                                     <label class="form-label" for="valor_pagamento">Valor Pagamento</label>
                                                     <input type="text" class="form-control" name="valor_pagamento" value="{{ titulo.valor_pagamento|default:'' }}">
                                                 </div>
-                                            </div>
 
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn me-auto" data-bs-dismiss="modal">Fechar</button>
-                                                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Confirmar Pagto. Parcial</button>
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="pagador">Pagador</label>
+                                                    <select id="pagador" name="pagador" class="form-select" aria-label="Pagador">
+                                                    <option value="">Selecione o pagador</option>
+                                                    {% for value, text  in pagadores %}
+                                                        <option value="{{ value }}" {% if text == titulo.pagador %} selected {% endif %}>{{ text }}</option>
+                                                    {% endfor %}
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn me-auto" data-bs-dismiss="modal">Fechar</button>
+                                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Confirmar alterações</button>
+                            </div>
                         </div>
-                    </div>
+
+                    </form>
                 </div>
             </div>
         </div>

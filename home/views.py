@@ -22,6 +22,14 @@ def home(request):
     if 'valor_filtro' in request.POST:
         valor_filtro = request.POST['valor_filtro']
 
+    supervisor_filtro = ''
+    if 'supervisor_filtro' in request.POST:
+        supervisor_filtro = request.POST['supervisor_filtro']
+
+    operador_filtro = ''
+    if 'operador_filtro' in request.POST:
+        operador_filtro = request.POST['operador_filtro']
+
     situacao_filtro = ''
     if 'situacao_filtro' in request.POST:
         situacao_filtro = request.POST['situacao_filtro']
@@ -46,17 +54,34 @@ def home(request):
             titulo.data_pagamento_formatada = titulo.data_pagamento_formatada.format('Y-m-d')
         titulo.anexos = get_titulo_anexos(titulo.id)
         titulo.observacoes = get_titulo_observacoes(titulo.id)
-        
+
+        if valor_filtro:
+            valor_filtro = float(valor_filtro)
+
+        valor_titulo = 0
+        if titulo.valor:
+            valor_titulo = float(titulo.valor)
+
+        supervisor_titulo = ''
+        if titulo.supervisor:
+            supervisor_titulo = titulo.supervisor.nome
+
+        operador_titulo = ''
+        if titulo.operador:
+            operador_titulo = titulo.operador.nome
+
         has_value = len(search) > 0 and (str(search).lower() in str(titulo.cedente.nome).lower() or str(search).lower() in str(titulo.sacado.nome).lower())
-        has_valor_filtro = len(valor_filtro) > 0 and float(valor_filtro) == float(titulo.valor)
+        has_valor_filtro = valor_filtro == valor_titulo
         has_situacao_filtro = len(situacao_filtro) > 0 and situacao_filtro == titulo.situacao.descricao or situacao_filtro == 'TODAS'
+        has_supervisor_filtro = len(supervisor_filtro) > 0 and supervisor_filtro == supervisor_titulo or supervisor_filtro == 'TODOS'
+        has_operador_filtro = len(operador_filtro) > 0 and operador_filtro == operador_titulo or operador_filtro == 'TODOS'
 
         dados_sacado = {
             "cedente": titulo.cedente.nome,
             "sacado": titulo.sacado.nome
         }
 
-        if (not search or has_value) and (not valor_filtro or has_valor_filtro) and (not situacao_filtro or has_situacao_filtro):
+        if (not search or has_value) and (not valor_filtro or has_valor_filtro) and (not situacao_filtro or has_situacao_filtro) and (not supervisor_filtro or has_supervisor_filtro) and (not operador_filtro or has_operador_filtro):
             if not titulo.cedente.nome in cedentes:
                 cedentes.append(titulo.cedente.nome)
             
@@ -68,13 +93,18 @@ def home(request):
     dados = {
         'cedentes': cedentes,
         'sacados': sacados,
+        "pagadores": get_pagadores(),
         'titulos': filtered_titulos,
         'links': get_links(),
         'search': search,
         'valor_filtro': valor_filtro,
+        'supervisor_filtro': supervisor_filtro,
+        'operador_filtro': operador_filtro,
         'situacao_filtro': situacao_filtro,
         'situacoes': get_situacoes(),
-        "formas_contato": get_formas_contato()
+        "formas_contato": get_formas_contato(),
+        "supervisores": get_supervisores(),
+        "operadores": get_operadores()
     }
     return render(request, 'home.html', dados)
 
@@ -213,12 +243,20 @@ def submit_importacao(request):
     
 def submit_update_titulo(request):
     upset_titulo(request)
-    messages.success(request, 'Cadastro atualizado com sucesso')
+
+    upset_observacoes(request)
+
+    set_pagamento_parcial(request)
+    messages.success(request, 'Titulo atualizado com sucesso')
     return redirect('home')
 
 def submit_update_titulo_acordo(request):
     upset_titulo(request)
-    messages.success(request, 'Cadastro atualizado com sucesso')
+
+    upset_observacoes(request)
+
+    set_pagamento_parcial(request)
+    messages.success(request, 'Acordo atualizado com sucesso')
     return redirect('acordo')
 
 def submit_update_pagamento(request):
@@ -235,26 +273,6 @@ def submit_update_juridico_externo(request):
     upset_pagamento(request)
     messages.success(request, 'Cadastro atualizado com sucesso')
     return redirect('juridico_externo')
-
-def submit_update_observacoes(request):
-    upset_observacoes(request)
-    messages.success(request, 'Cadastro atualizado com sucesso')
-    return redirect('home')
-
-def submit_update_observacoes_acordo(request):
-    upset_observacoes(request)
-    messages.success(request, 'Cadastro atualizado com sucesso')
-    return redirect('acordo')
-
-def submit_pagamento_parcial(request):
-    set_pagamento_parcial(request)
-    messages.success(request, 'Cadastro atualizado com sucesso')
-    return redirect('home')
-
-def submit_pagamento_parcial_acordo(request):
-    set_pagamento_parcial(request, True)
-    messages.success(request, 'Cadastro atualizado com sucesso')
-    return redirect('acordo')
 
 def pagamento(request):
     if not 'user' in request.session:
@@ -276,9 +294,18 @@ def pagamento(request):
 
     quantidade_pagamentos = 0
     valor_pago = 0
+    valores_face = 0
+    encargos = 0
     for pagamento in pagamentos:
         quantidade_pagamentos += 1
         valor_pago += pagamento.valor
+        if pagamento.valor_face:
+            valores_face += float(pagamento.valor_face)
+        else:
+            valores_face += float(pagamento.valor)
+
+        if pagamento.encargo:
+            encargos += float(pagamento.encargo)
 
         if pagamento.data_pagamento:
             pagamento.data_pagamento_formatada = DateFormat(pagamento.data_pagamento)
@@ -288,6 +315,8 @@ def pagamento(request):
         'pagamentos': pagamentos,
         'quantidade_pagamentos': quantidade_pagamentos,
         'valor_pago': valor_pago,
+        'valores_face': valores_face,
+        'encargos': encargos,
         'data_inicial': data_inicial,
         'data_final': data_final,
         'situacoes': get_situacoes()
@@ -310,6 +339,9 @@ def acordo(request):
     if 'data_final' in request.POST:
         data_final = request.POST['data_final']
 
+    cedentes = []
+    sacados = []
+
     acordos = get_acordos(data_inicial, data_final)
     for acordo in acordos:
         acordo.whatsapp = get_whatsapp(acordo.sacado.nome, acordo.contato)
@@ -322,13 +354,27 @@ def acordo(request):
             acordo.data_vencimento_formatada = acordo.data_vencimento_formatada.format('Y-m-d')
         acordo.observacoes = get_titulo_observacoes(acordo.id)
         acordo.anexos = get_titulo_anexos(acordo.id)
+    
+        if not acordo.cedente.nome in cedentes:
+            cedentes.append(acordo.cedente.nome)
+
+        dados_sacado = {
+            "cedente": acordo.cedente.nome,
+            "sacado": acordo.sacado.nome
+        }
+        if not dados_sacado in sacados:
+            sacados.append(dados_sacado)
 
     dados = {
+        'cedentes': cedentes,
+        'sacados': sacados,
         'acordos': acordos,
         'data_inicial': data_inicial,
         'data_final': data_final,
         'situacoes': get_situacoes(),
-        "formas_contato": get_formas_contato()
+        "formas_contato": get_formas_contato(),
+        "supervisores": get_supervisores(),
+        "operadores": get_operadores()
     }
     return render(request, 'acordo.html', dados)
 

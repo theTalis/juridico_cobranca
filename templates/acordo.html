@@ -134,6 +134,15 @@
                                 <div class="col-2 p-5">
                                     <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Filtrar</button>
                                 </div>
+
+                                <div class="col-4 pl-5 mt-4 row">
+                                    <div class="col-4 p-2">
+                                        <button type="button" onclick="marcarTodos()" class="btn btn-primary">Marcar todos</button>
+                                    </div>
+                                    <div class="col-2 p-2">
+                                        <button type="button" onclick="desmarcarTodos()" class="btn btn-primary">Desmarcar todos</button>
+                                    </div>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -143,30 +152,52 @@
                                 <table class="table card-table table-vcenter text-nowrap datatable">
                                     <thead>
                                         <tr>
+                                            <th scope="col">Cedente / Sacado</th>
+                                            <th scope="col"></th>
                                             <th scope="col">Id</th>
-                                            <th scope="col">Cedente</th>
-                                            <th scope="col">Sacado</th>
                                             <th scope="col">Valor</th>
+                                            <th scope="col">Valor Face</th>
+                                            <th scope="col">Encargo</th>
+                                            <th scope="col">Supervisor</th>
+                                            <th scope="col">Operador</th>
                                             <th scope="col">Contato</th>
-                                            <th scope="col">Forma de contato</th>
+                                            <th scope="col">Registro</th>
                                             <th scope="col">Pagador</th>
-                                            <th scope="col">Situação</th>
                                             <th scope="col">Data vencimento</th>
                                             <th scope="col">Último contato</th>
-                                            <th scope="col">Data inclusão</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {% for cedente in cedentes %}
+
+                                        <tr class="header">
+                                            <td>Cedente - {{ cedente|slice:"0:20" }}</td>
+                                        </tr>
+
+                                        {% for sacado in sacados %}
+                                        
+                                        {% if sacado.cedente == cedente %}
+                                        <tr class="subheader" style="display: none">
+                                            <td>Sacado - {{ sacado.sacado|slice:"0:20" }}</td>
+                                        </tr>
+
                                         {% for acordo in acordos %}
-                                        <tr>
+                                        
+                                        {% if acordo.cedente.nome == cedente and acordo.sacado.nome == sacado.sacado %}
+                                        <tr style="display: none">
+                                            <td></td>
+                                            <td><input id="marcado_{{acordo.id}}" class="marcado" type="checkbox" {% if acordo.marcado %} checked {% endif %}></td>
+
                                             <th scope="row">
                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#modal_pagamento_{{acordo.id}}">
                                                     {{forloop.counter}}
                                                 </a>
                                             </th>
-                                            <td>{{ acordo.cedente }}</td>
-                                            <td>{{ acordo.sacado }}</td>
                                             <td class="{{ acordo.valor }}">R$ {{ acordo.valor|floatformat:2 }}</td>
+                                            <td class="{{ acordo.valor_face }}">R$ {{ acordo.valor_face|floatformat:2 }}</td>
+                                            <td class="{{ acordo.encargo }}">R$ {{ acordo.encargo|floatformat:2 }}</td>
+                                            <td>{{ acordo.supervisor.nome }}</td>
+                                            <td>{{ acordo.operador.nome }}</td>
                                             <td>
                                                 <a href="{{ acordo.whatsapp }}" target="_blank">
                                                     {{ acordo.contato }}
@@ -174,11 +205,17 @@
                                             </td>
                                             <td>{{ acordo.forma_contato }}</td>
                                             <td>{{ acordo.pagador }}</td>
-                                            <td>{{ acordo.situacao }}</td>
                                             <td>{{ acordo.data_vencimento|default:'' }}</td>
                                             <td>{{ acordo.data_pagamento|default:'' }}</td>
-                                            <td>{{ acordo.created_at }}</td>
                                         </tr>
+                                        {% endif %}
+                                        
+                                        {% endfor %}
+
+                                        {% endif %}
+
+                                        {% endfor %}
+                                        
                                         {% endfor %}
                                     </tbody>
                                 </table>
@@ -199,29 +236,28 @@
                     </div>
 
                     <div class="modal-body">
+                        <form method="post" action="{% url 'submit_update_titulo_acordo' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="hidden" name="titulo_id" value="{{ acordo.id }}">
 
-                        <div class="card">
-                            <div class="card-header">
-                                <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" role="tablist">
-                                    <li class="nav-item" role="presentation">
-                                        <a href="#tabs-titulo_{{acordo.id}}" class="nav-link active" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">Título</a>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <a href="#tabs-observacoes_{{acordo.id}}" class="nav-link" data-bs-toggle="tab" aria-selected="true" role="tab">Observações</a>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <a href="#tabs-parcial_{{acordo.id}}" class="nav-link" data-bs-toggle="tab" aria-selected="true" role="tab">Pagto. parcial</a>
-                                    </li>
-                                </ul>
-                            </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <a href="#tabs-titulo_{{acordo.id}}" class="nav-link active" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">Título</a>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <a href="#tabs-observacoes_{{acordo.id}}" class="nav-link" data-bs-toggle="tab" aria-selected="true" role="tab">Observações</a>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <a href="#tabs-parcial_{{acordo.id}}" class="nav-link" data-bs-toggle="tab" aria-selected="true" role="tab">Pagto. parcial</a>
+                                        </li>
+                                    </ul>
+                                </div>
 
-                            <div class="card-body">
-                                <div class="tab-content">
-                                    <div class="tab-pane active show" id="tabs-titulo_{{acordo.id}}" role="tabpanel">
-                                        <form method="post" action="{% url 'submit_update_titulo_acordo' %}">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="titulo_id" value="{{ acordo.id }}">
-
+                                <div class="card-body">
+                                    <div class="tab-content">
+                                        <div class="tab-pane active show" id="tabs-titulo_{{acordo.id}}" role="tabpanel">
                                             <div class="mb-3">
                                                 <label class="form-label" for="situacao">Situação</label>
                                                 <select id="situacao" name="situacao" class="form-select" aria-label="Situação">
@@ -236,6 +272,26 @@
                                                     <option value="">Selecione a forma de contato</option>
                                                     {% for forma_contato in formas_contato %}
                                                         <option value="{{ forma_contato.descricao }}" {% if forma_contato.descricao == acordo.forma_contato.descricao %} selected {% endif %}>{{ forma_contato.descricao }}</option>
+                                                    {% endfor %}
+                                                    </select>
+                                                </div>
+                    
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="supervisor">Supervisor</label>
+                                                    <select id="supervisor" name="supervisor" class="form-select" aria-label="Supervisor">
+                                                    <option value="">Selecione o supervisor</option>
+                                                    {% for supervisor in supervisores %}
+                                                        <option value="{{ supervisor.nome }}" {% if supervisor.nome == acordo.supervisor.nome %} selected {% endif %}>{{ supervisor.nome }}</option>
+                                                    {% endfor %}
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="operador">Operador</label>
+                                                    <select id="operador" name="operador" class="form-select" aria-label="Operador">
+                                                    <option value="">Selecione o operador</option>
+                                                    {% for operador in operadores %}
+                                                        <option value="{{ operador.nome }}" {% if operador.nome == acordo.operador.nome %} selected {% endif %}>{{ operador.nome }}</option>
                                                     {% endfor %}
                                                     </select>
                                                 </div>
@@ -261,6 +317,11 @@
                                                 </div>
 
                                                 <div class="mb-3">
+                                                    <label class="form-label" for="valor_encargo">Valor Encargo</label>
+                                                    <input type="text" class="form-control" name="valor_encargo" value="{{ acordo.encargo|default:'' }}">
+                                                </div>
+
+                                                <div class="mb-3">
                                                     <label class="form-label" for="anexo">Anexo</label>
                                                     <input type="file" name="anexo" class="form-control">
                                                 </div>
@@ -271,19 +332,9 @@
                                                     {% endfor %}
                                                 </div>
                                             </div>
+                                        </div>
 
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn me-auto" data-bs-dismiss="modal">Fechar</button>
-                                                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Confirmar alterações</button>
-                                            </div>
-                                        </form>
-                                    </div>
-
-                                    <div class="tab-pane" id="tabs-observacoes_{{acordo.id}}" role="tabpanel">
-                                        <form method="post" action="{% url 'submit_update_observacoes_acordo' %}" enctype="multipart/form-data">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="titulo_id" value="{{ acordo.id }}">
-
+                                        <div class="tab-pane" id="tabs-observacoes_{{acordo.id}}" role="tabpanel">
                                             <div class="mb-3">
                                                 <div class="mb-3">
                                                     <textarea class="form-control" name="observacao" rows="3" placeholder="Inclua uma nova observação"></textarea>
@@ -295,19 +346,9 @@
                                                     {% endfor %}
                                                 </div>
                                             </div>
+                                        </div>
 
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn me-auto" data-bs-dismiss="modal">Fechar</button>
-                                                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Confirmar observações</button>
-                                            </div>
-                                        </form>
-                                    </div>
-
-                                    <div class="tab-pane" id="tabs-parcial_{{acordo.id}}" role="tabpanel">
-                                        <form method="post" action="{% url 'submit_pagamento_parcial_acordo' %}">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="titulo_id" value="{{ acordo.id }}">
-
+                                        <div class="tab-pane" id="tabs-parcial_{{acordo.id}}" role="tabpanel">
                                             <div class="mb-3">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="data_pagamento">Data pagamento</label>
@@ -319,16 +360,16 @@
                                                     <input type="text" class="form-control" name="valor_pagamento" value="{{ acordo.valor_pagamento|default:'' }}">
                                                 </div>
                                             </div>
-
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn me-auto" data-bs-dismiss="modal">Fechar</button>
-                                                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Confirmar Pagto. Parcial</button>
-                                            </div>
-                                        </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn me-auto" data-bs-dismiss="modal">Fechar</button>
+                                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Confirmar alterações</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -336,5 +377,87 @@
         {% endfor %}
     </div>    
     <script src="https://unpkg.com/@tabler/core@latest/dist/js/tabler.min.js"></script>
+    <script>
+        $("#forma_contato").on("change", function() {
+            $("#contato").unmask();
+
+            if ($("#forma_contato").val() != "E-mail") {
+                $("#contato").mask("(99) 9999?9-9999");
+
+                $("#contato").on("blur", function() {
+                    var last = $(this).val().substr( $(this).val().indexOf("-") + 1 );
+
+                    if( last.length == 3 ) {
+                        var move = $(this).val().substr( $(this).val().indexOf("-") - 1, 1 );
+                        var lastfour = move + last;
+                        var first = $(this).val().substr( 0, 9 );
+
+                        $(this).val( first + '-' + lastfour );
+                    }
+                });
+            }
+        })
+
+        $(".marcado").on("change", function() {
+            const items = [{
+                id: $(this).attr("id"),
+                checked: $(this).is(':checked')
+            }]
+
+            callUpdate(items)
+        })
+
+        function marcarTodos() {
+            $(".marcado").prop('checked',true);
+
+            let items = []
+            $(".marcado").each(function() {
+                items.push({
+                    id: $(this).attr("id"),
+                    checked: true
+                })
+            })
+
+            callUpdate(items)
+        }
+
+        function desmarcarTodos() {
+            $(".marcado").prop('checked',false);
+
+            let items = []
+            $(".marcado").each(function() {
+                items.push({
+                    id: $(this).attr("id"),
+                    checked: false
+                })
+            })
+
+            callUpdate(items)
+
+        }
+
+        function callUpdate(items) {
+
+            $.ajax({
+                url: "update_checked",
+                type: "POST",
+                dataType: "json",
+                data: JSON.stringify({"items": items}),
+                headers: {
+                  "X-Requested-With": "XMLHttpRequest",
+                },
+                success: (data) => {
+                },
+                error: (error) => {
+                }
+              });
+        }
+        
+        $('tr.header').click(function(){
+            $(this).nextUntil('tr.header').css('display', function(i,v){
+                return this.style.display === 'table-row' ? 'none' : 'table-row';
+            });
+        });
+    </script>
 </body>
 {% endblock %}

@@ -20,6 +20,12 @@ def get_origens():
 def get_formas_contato():
     return get_dados_formas_contato()
 
+def get_supervisores():
+    return get_dados_supervisores()
+
+def get_operadores():
+    return get_dados_operadores()
+
 def get_erros_cadastro(request):
     forma_contato = request.POST['forma_contato']
     contato = request.POST['contato']
