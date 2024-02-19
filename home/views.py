@@ -243,6 +243,10 @@ def submit_importacao(request):
     
 def submit_update_titulo(request):
     upset_titulo(request)
+
+    upset_observacoes(request)
+
+    set_pagamento_parcial(request)
     messages.success(request, 'Cadastro atualizado com sucesso')
     return redirect('home')
 

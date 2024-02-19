@@ -153,7 +153,6 @@ def update_titulo(request):
         titulo.valor = float(titulo.valor) + float(str(request.POST['valor_encargo']).replace(',', '.'))
     else:
         titulo.encargo = 0
-        titulo.valor = titulo.valor_face
 
     titulo.save()
     
@@ -241,6 +240,9 @@ def create_pagamento_parcial(request, is_acordo):
         titulo_parcial.save()
 
         titulo.valor = valor_original - valor_pagamento
+        
+        if titulo.encargo:
+            titulo.valor_face = titulo.valor - titulo.encargo
         titulo.save()
 
 def get_dados_titulo_anexos(titulo_id):
