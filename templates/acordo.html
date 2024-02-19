@@ -236,29 +236,28 @@
                     </div>
 
                     <div class="modal-body">
+                        <form method="post" action="{% url 'submit_update_titulo_acordo' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="hidden" name="titulo_id" value="{{ acordo.id }}">
 
-                        <div class="card">
-                            <div class="card-header">
-                                <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" role="tablist">
-                                    <li class="nav-item" role="presentation">
-                                        <a href="#tabs-titulo_{{acordo.id}}" class="nav-link active" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">Título</a>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <a href="#tabs-observacoes_{{acordo.id}}" class="nav-link" data-bs-toggle="tab" aria-selected="true" role="tab">Observações</a>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <a href="#tabs-parcial_{{acordo.id}}" class="nav-link" data-bs-toggle="tab" aria-selected="true" role="tab">Pagto. parcial</a>
-                                    </li>
-                                </ul>
-                            </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <a href="#tabs-titulo_{{acordo.id}}" class="nav-link active" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">Título</a>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <a href="#tabs-observacoes_{{acordo.id}}" class="nav-link" data-bs-toggle="tab" aria-selected="true" role="tab">Observações</a>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <a href="#tabs-parcial_{{acordo.id}}" class="nav-link" data-bs-toggle="tab" aria-selected="true" role="tab">Pagto. parcial</a>
+                                        </li>
+                                    </ul>
+                                </div>
 
-                            <div class="card-body">
-                                <div class="tab-content">
-                                    <div class="tab-pane active show" id="tabs-titulo_{{acordo.id}}" role="tabpanel">
-                                        <form method="post" action="{% url 'submit_update_titulo_acordo' %}">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="titulo_id" value="{{ acordo.id }}">
-
+                                <div class="card-body">
+                                    <div class="tab-content">
+                                        <div class="tab-pane active show" id="tabs-titulo_{{acordo.id}}" role="tabpanel">
                                             <div class="mb-3">
                                                 <label class="form-label" for="situacao">Situação</label>
                                                 <select id="situacao" name="situacao" class="form-select" aria-label="Situação">
@@ -333,19 +332,9 @@
                                                     {% endfor %}
                                                 </div>
                                             </div>
+                                        </div>
 
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn me-auto" data-bs-dismiss="modal">Fechar</button>
-                                                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Confirmar alterações</button>
-                                            </div>
-                                        </form>
-                                    </div>
-
-                                    <div class="tab-pane" id="tabs-observacoes_{{acordo.id}}" role="tabpanel">
-                                        <form method="post" action="{% url 'submit_update_observacoes_acordo' %}" enctype="multipart/form-data">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="titulo_id" value="{{ acordo.id }}">
-
+                                        <div class="tab-pane" id="tabs-observacoes_{{acordo.id}}" role="tabpanel">
                                             <div class="mb-3">
                                                 <div class="mb-3">
                                                     <textarea class="form-control" name="observacao" rows="3" placeholder="Inclua uma nova observação"></textarea>
@@ -357,19 +346,9 @@
                                                     {% endfor %}
                                                 </div>
                                             </div>
+                                        </div>
 
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn me-auto" data-bs-dismiss="modal">Fechar</button>
-                                                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Confirmar observações</button>
-                                            </div>
-                                        </form>
-                                    </div>
-
-                                    <div class="tab-pane" id="tabs-parcial_{{acordo.id}}" role="tabpanel">
-                                        <form method="post" action="{% url 'submit_pagamento_parcial_acordo' %}">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="titulo_id" value="{{ acordo.id }}">
-
+                                        <div class="tab-pane" id="tabs-parcial_{{acordo.id}}" role="tabpanel">
                                             <div class="mb-3">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="data_pagamento">Data pagamento</label>
@@ -381,16 +360,16 @@
                                                     <input type="text" class="form-control" name="valor_pagamento" value="{{ acordo.valor_pagamento|default:'' }}">
                                                 </div>
                                             </div>
-
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn me-auto" data-bs-dismiss="modal">Fechar</button>
-                                                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Confirmar Pagto. Parcial</button>
-                                            </div>
-                                        </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn me-auto" data-bs-dismiss="modal">Fechar</button>
+                                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Confirmar alterações</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

@@ -286,13 +286,17 @@
         <div class="modal" id="modal_titulo_{{titulo.id}}" tabindex="-1">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">{{titulo.cedente}} - {{titulo.sacado}} | R$ {{ titulo.valor|floatformat:2  }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
+                    <form method="post" action="{% url 'submit_update_titulo' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h5 class="modal-title">{{titulo.cedente}} - {{titulo.sacado}} | R$ {{ titulo.valor|floatformat:2  }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
 
-                    <div class="modal-body">
-                        <form method="post" action="{% url 'submit_update_titulo' %}" enctype="multipart/form-data">
+                        <div class="modal-body">
+
+                            <input type="hidden" name="titulo_id" value="{{ titulo.id }}">
+
                             <div class="card">
                                 <div class="card-header">
                                     <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" role="tablist">
@@ -311,142 +315,119 @@
                                 <div class="card-body">
                                     <div class="tab-content">
                                         <div class="tab-pane active show" id="tabs-titulo_{{titulo.id}}" role="tabpanel">
-                                                {% comment %} {% csrf_token %} {% endcomment %}
-                                                <input type="hidden" name="titulo_id" value="{{ titulo.id }}">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="situacao">Situação</label>
+                                                <select id="situacao" name="situacao" class="form-select" aria-label="Situação">
+                                                {% for situacao in situacoes %}
+                                                    <option value="{{ situacao.descricao }}" {% if situacao.descricao == titulo.situacao.descricao %} selected {% endif %}>{{ situacao.descricao }}</option>
+                                                {% endfor %}
+                                                </select>
 
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="situacao">Situação</label>
-                                                    <select id="situacao" name="situacao" class="form-select" aria-label="Situação">
-                                                    {% for situacao in situacoes %}
-                                                        <option value="{{ situacao.descricao }}" {% if situacao.descricao == titulo.situacao.descricao %} selected {% endif %}>{{ situacao.descricao }}</option>
+                                                    <label class="form-label" for="forma_contato">Forma contato</label>
+                                                    <select id="forma_contato" name="forma_contato" class="form-select" aria-label="Forma contato">
+                                                    <option value="">Selecione a forma de contato</option>
+                                                    {% for forma_contato in formas_contato %}
+                                                        <option value="{{ forma_contato.descricao }}" {% if forma_contato.descricao == titulo.forma_contato.descricao %} selected {% endif %}>{{ forma_contato.descricao }}</option>
                                                     {% endfor %}
                                                     </select>
-
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="forma_contato">Forma contato</label>
-                                                        <select id="forma_contato" name="forma_contato" class="form-select" aria-label="Forma contato">
-                                                        <option value="">Selecione a forma de contato</option>
-                                                        {% for forma_contato in formas_contato %}
-                                                            <option value="{{ forma_contato.descricao }}" {% if forma_contato.descricao == titulo.forma_contato.descricao %} selected {% endif %}>{{ forma_contato.descricao }}</option>
-                                                        {% endfor %}
-                                                        </select>
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="supervisor">Supervisor</label>
-                                                        <select id="supervisor" name="supervisor" class="form-select" aria-label="Supervisor">
-                                                        <option value="">Selecione o supervisor</option>
-                                                        {% for supervisor in supervisores %}
-                                                            <option value="{{ supervisor.nome }}" {% if supervisor.nome == titulo.supervisor.nome %} selected {% endif %}>{{ supervisor.nome }}</option>
-                                                        {% endfor %}
-                                                        </select>
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="operador">Operador</label>
-                                                        <select id="operador" name="operador" class="form-select" aria-label="Operador">
-                                                        <option value="">Selecione o operador</option>
-                                                        {% for operador in operadores %}
-                                                            <option value="{{ operador.nome }}" {% if operador.nome == titulo.operador.nome %} selected {% endif %}>{{ operador.nome }}</option>
-                                                        {% endfor %}
-                                                        </select>
-                                                    </div>
-                        
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="contato">Contato</label>
-                                                        <input type="text" class="form-control" id="contato" name="contato" value="{{ titulo.contato }}">
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="contato_secundario">Contato Secundário</label>
-                                                        <input type="text" class="form-control" id="contato_secundario" name="contato_secundario" value="{{ titulo.contato_secundario|default:'' }}">
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="data_vencimento">Data vencimento</label>
-                                                        <input type="date" class="form-control" name="data_vencimento" value="{{ titulo.data_vencimento_formatada|default:'' }}">
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="data_pagamento">Data pagamento</label>
-                                                        <input type="date" class="form-control" name="data_pagamento" value="{{ titulo.data_pagamento_formatada|default:'' }}">
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="valor_encargo">Valor Encargo</label>
-                                                        <input type="text" class="form-control" name="valor_encargo" value="{{ titulo.encargo|default:'' }}">
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="anexo">Anexo</label>
-                                                        <input type="file" name="anexo" class="form-control">
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        {% for anexo in titulo.anexos %}
-                                                            <a href="media/{{ anexo.arquivo }}" target="_blank">{{ anexo.descricao }}</a>
-                                                        {% endfor %}
-                                                    </div>
                                                 </div>
-                                            {% comment %} </form> {% endcomment %}
+
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="supervisor">Supervisor</label>
+                                                    <select id="supervisor" name="supervisor" class="form-select" aria-label="Supervisor">
+                                                    <option value="">Selecione o supervisor</option>
+                                                    {% for supervisor in supervisores %}
+                                                        <option value="{{ supervisor.nome }}" {% if supervisor.nome == titulo.supervisor.nome %} selected {% endif %}>{{ supervisor.nome }}</option>
+                                                    {% endfor %}
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="operador">Operador</label>
+                                                    <select id="operador" name="operador" class="form-select" aria-label="Operador">
+                                                    <option value="">Selecione o operador</option>
+                                                    {% for operador in operadores %}
+                                                        <option value="{{ operador.nome }}" {% if operador.nome == titulo.operador.nome %} selected {% endif %}>{{ operador.nome }}</option>
+                                                    {% endfor %}
+                                                    </select>
+                                                </div>
+                    
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="contato">Contato</label>
+                                                    <input type="text" class="form-control" id="contato" name="contato" value="{{ titulo.contato }}">
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="contato_secundario">Contato Secundário</label>
+                                                    <input type="text" class="form-control" id="contato_secundario" name="contato_secundario" value="{{ titulo.contato_secundario|default:'' }}">
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="data_vencimento">Data vencimento</label>
+                                                    <input type="date" class="form-control" name="data_vencimento" value="{{ titulo.data_vencimento_formatada|default:'' }}">
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="data_pagamento">Data pagamento</label>
+                                                    <input type="date" class="form-control" name="data_pagamento" value="{{ titulo.data_pagamento_formatada|default:'' }}">
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="valor_encargo">Valor Encargo</label>
+                                                    <input type="text" class="form-control" name="valor_encargo" value="{{ titulo.encargo|default:'' }}">
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="anexo">Anexo</label>
+                                                    <input type="file" name="anexo" class="form-control">
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    {% for anexo in titulo.anexos %}
+                                                        <a href="media/{{ anexo.arquivo }}" target="_blank">{{ anexo.descricao }}</a>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <div class="tab-pane" id="tabs-observacoes_{{titulo.id}}" role="tabpanel">
-                                            <form method="post" action="{% url 'submit_update_observacoes' %}" enctype="multipart/form-data">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="titulo_id" value="{{ titulo.id }}">
-
+                                            <div class="mb-3">
                                                 <div class="mb-3">
-                                                    <div class="mb-3">
-                                                        <textarea class="form-control" name="observacao" rows="3" placeholder="Inclua uma nova observação"></textarea>
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        {% for observacao in titulo.observacoes %}
-                                                            <textarea class="form-control mb-2" name="observacao_{{ observacao.id }}">{{ observacao.descricao }}</textarea>
-                                                        {% endfor %}
-                                                    </div>
+                                                    <textarea class="form-control" name="observacao" rows="3" placeholder="Inclua uma nova observação"></textarea>
                                                 </div>
 
-                                                {% comment %} <div class="modal-footer">
-                                                    <button type="button" class="btn me-auto" data-bs-dismiss="modal">Fechar</button>
-                                                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Confirmar observações</button>
-                                                </div> {% endcomment %}
-                                            {% comment %} </form> {% endcomment %}
+                                                <div class="mb-3">
+                                                    {% for observacao in titulo.observacoes %}
+                                                        <textarea class="form-control mb-2" name="observacao_{{ observacao.id }}">{{ observacao.descricao }}</textarea>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <div class="tab-pane" id="tabs-parcial_{{titulo.id}}" role="tabpanel">
-                                            {% comment %} <form method="post" action="{% url 'submit_pagamento_parcial' %}">
-                                                {% csrf_token %} {% endcomment %}
-                                                <input type="hidden" name="titulo_id" value="{{ titulo.id }}">
 
+                                            <div class="mb-3">
                                                 <div class="mb-3">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="data_pagamento">Data pagamento</label>
-                                                        <input type="date" class="form-control" name="data_pagamento" value="{{ titulo.data_pagamento_formatada|default:'' }}">
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="valor_pagamento">Valor Pagamento</label>
-                                                        <input type="text" class="form-control" name="valor_pagamento" value="{{ titulo.valor_pagamento|default:'' }}">
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="pagador">Pagador</label>
-                                                        <select name="pagador" class="form-select" aria-label="Pagador" required>
-                                                        <option value="">Selecione o pagador</option>
-                                                        {% for value, text  in pagadores %}
-                                                            {% comment %} <option value="{{ value }}">{{ text }}</option> {% endcomment %}
-                                                            <option value="{{ value }}" {% if text == titulo.pagador %} selected {% endif %}>{{ text }}</option>
-                                                        {% endfor %}
-                                                        </select>
-                                                    </div>
+                                                    <label class="form-label" for="data_pagamento">Data pagamento</label>
+                                                    <input type="date" class="form-control" name="data_pagamento" value="{{ titulo.data_pagamento_formatada|default:'' }}">
                                                 </div>
 
-                                                {% comment %} <div class="modal-footer">
-                                                    <button type="button" class="btn me-auto" data-bs-dismiss="modal">Fechar</button>
-                                                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Confirmar Pagto. Parcial</button>
-                                                </div> {% endcomment %}
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="valor_pagamento">Valor Pagamento</label>
+                                                    <input type="text" class="form-control" name="valor_pagamento" value="{{ titulo.valor_pagamento|default:'' }}">
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="pagador">Pagador</label>
+                                                    <select id="pagador" name="pagador" class="form-select" aria-label="Pagador">
+                                                    <option value="">Selecione o pagador</option>
+                                                    {% for value, text  in pagadores %}
+                                                        <option value="{{ value }}" {% if text == titulo.pagador %} selected {% endif %}>{{ text }}</option>
+                                                    {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -456,8 +437,9 @@
                                 <button type="button" class="btn me-auto" data-bs-dismiss="modal">Fechar</button>
                                 <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Confirmar alterações</button>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+
+                    </form>
                 </div>
             </div>
         </div>

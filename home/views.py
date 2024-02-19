@@ -247,12 +247,16 @@ def submit_update_titulo(request):
     upset_observacoes(request)
 
     set_pagamento_parcial(request)
-    messages.success(request, 'Cadastro atualizado com sucesso')
+    messages.success(request, 'Titulo atualizado com sucesso')
     return redirect('home')
 
 def submit_update_titulo_acordo(request):
     upset_titulo(request)
-    messages.success(request, 'Cadastro atualizado com sucesso')
+
+    upset_observacoes(request)
+
+    set_pagamento_parcial(request)
+    messages.success(request, 'Acordo atualizado com sucesso')
     return redirect('acordo')
 
 def submit_update_pagamento(request):
