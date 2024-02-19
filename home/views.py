@@ -274,26 +274,6 @@ def submit_update_juridico_externo(request):
     messages.success(request, 'Cadastro atualizado com sucesso')
     return redirect('juridico_externo')
 
-def submit_update_observacoes(request):
-    upset_observacoes(request)
-    messages.success(request, 'Cadastro atualizado com sucesso')
-    return redirect('home')
-
-def submit_update_observacoes_acordo(request):
-    upset_observacoes(request)
-    messages.success(request, 'Cadastro atualizado com sucesso')
-    return redirect('acordo')
-
-def submit_pagamento_parcial(request):
-    set_pagamento_parcial(request)
-    messages.success(request, 'Cadastro atualizado com sucesso')
-    return redirect('home')
-
-def submit_pagamento_parcial_acordo(request):
-    set_pagamento_parcial(request, True)
-    messages.success(request, 'Cadastro atualizado com sucesso')
-    return redirect('acordo')
-
 def pagamento(request):
     if not 'user' in request.session:
         messages.warning(
