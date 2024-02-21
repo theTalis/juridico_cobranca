@@ -148,9 +148,8 @@ def update_titulo(request):
         titulo.data_vencimento = None
 
     if len(request.POST['valor_encargo']) > 0:
-        titulo.valor_face = titulo.valor
+        titulo.valor_face = titulo.valor - float(str(request.POST['valor_encargo']).replace(',', '.'))
         titulo.encargo = float(str(request.POST['valor_encargo']).replace(',', '.'))
-        titulo.valor = float(titulo.valor) + float(str(request.POST['valor_encargo']).replace(',', '.'))
     else:
         titulo.encargo = 0
 
@@ -183,9 +182,8 @@ def update_pagamento(request):
         titulo.data_vencimento = None
 
     if len(request.POST['valor_encargo']) > 0:
-        titulo.valor_face = titulo.valor
+        titulo.valor_face = titulo.valor - float(str(request.POST['valor_encargo']).replace(',', '.'))
         titulo.encargo = float(str(request.POST['valor_encargo']).replace(',', '.'))
-        titulo.valor = float(titulo.valor) + float(str(request.POST['valor_encargo']).replace(',', '.'))
 
     titulo.save()
 
