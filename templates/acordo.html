@@ -155,6 +155,7 @@
                                             <th scope="col">Cedente / Sacado</th>
                                             <th scope="col"></th>
                                             <th scope="col">Id</th>
+                                            <th scope="col">Data vencimento</th>
                                             <th scope="col">Valor</th>
                                             <th scope="col">Valor Face</th>
                                             <th scope="col">Encargo</th>
@@ -163,7 +164,6 @@
                                             <th scope="col">Contato</th>
                                             <th scope="col">Registro</th>
                                             <th scope="col">Pagador</th>
-                                            <th scope="col">Data vencimento</th>
                                             <th scope="col">Último contato</th>
                                         </tr>
                                     </thead>
@@ -193,6 +193,7 @@
                                                     {{forloop.counter}}
                                                 </a>
                                             </th>
+                                            <td>{{ acordo.data_vencimento|default:'' }}</td>
                                             <td class="{{ acordo.valor }}">R$ {{ acordo.valor|floatformat:2 }}</td>
                                             <td class="{{ acordo.valor_face }}">R$ {{ acordo.valor_face|floatformat:2 }}</td>
                                             <td class="{{ acordo.encargo }}">R$ {{ acordo.encargo|floatformat:2 }}</td>
@@ -205,7 +206,6 @@
                                             </td>
                                             <td>{{ acordo.forma_contato }}</td>
                                             <td>{{ acordo.pagador }}</td>
-                                            <td>{{ acordo.data_vencimento|default:'' }}</td>
                                             <td>{{ acordo.data_pagamento|default:'' }}</td>
                                         </tr>
                                         {% endif %}

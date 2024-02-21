@@ -229,12 +229,14 @@ def create_pagamento_parcial(request, is_acordo):
         titulo_parcial = Titulo.objects.get(pk=request.POST['titulo_id'])
         titulo_parcial.pk = None
 
-        if len(request.POST['pagador']) > 0:
+        if 'pagador' in request.POST and len(request.POST['pagador']) > 0:
             titulo_parcial.pagador = request.POST['pagador']
 
         titulo_parcial.situacao = situacao
         titulo_parcial.data_pagamento = data_pagamento
         titulo_parcial.valor = valor_pagamento
+        titulo_parcial.encargo = 0
+        titulo_parcial.valor_face = titulo_parcial.valor
         titulo_parcial.save()
 
         titulo.valor = valor_original - valor_pagamento
