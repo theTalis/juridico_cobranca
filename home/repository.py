@@ -42,14 +42,14 @@ def get_dados_operadores():
     
 def create_titulo(request, params):
     try:
-        cedente = Cedente.objects.filter(nome=params['cedente']).first()
+        cedente = Cedente.objects.get(nome=params['cedente'])
     except Cedente.DoesNotExist:
         cedente = Cedente.objects.create(
             nome=params['cedente']
         )
 
     try:
-        sacado = Sacado.objects.filter(nome=params['sacado']).first()
+        sacado = Sacado.objects.get(nome=params['sacado'])
     except Sacado.DoesNotExist:
         sacado = Sacado.objects.create(
             nome=params['sacado']

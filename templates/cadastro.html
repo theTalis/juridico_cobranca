@@ -159,6 +159,16 @@
                             </div>
 
                             <div class="mb-3">
+                                <label class="form-label" for="situacao">Situação</label>
+                                <select name="situacao" class="form-select" aria-label="Situação" required>
+                                <option value="">Selecione a situação</option>
+                                {% for situacao in situacoes %}
+                                    <option value="{{ situacao.descricao }}">{{ situacao.descricao }}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
                                 <label class="form-label" for="forma_contato">Forma contato</label>
                                 <select id="forma_contato" name="forma_contato" class="form-select" aria-label="Forma contato" required>
                                 <option value="">Selecione a forma de contato</option>

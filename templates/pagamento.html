@@ -122,6 +122,11 @@
                             {% csrf_token %}
                             <div class="row col-12 p-2">
                                 <div class="col-2 p-2">
+                                    <label class="form-label" for="search">Nome</label>
+                                    <input type="text" class="form-control" name="search" value="{{ search|default:'' }}">
+                                </div>
+
+                                <div class="col-2 p-2">
                                     <label class="form-label" for="data_inicial">Data inicial</label>
                                     <input type="date" class="form-control" name="data_inicial" value="{{ data_inicial|default:'' }}">
                                 </div>
