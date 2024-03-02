@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate
 from .services import *
 from django.utils.dateformat import DateFormat
 from datetime import datetime, timedelta
+import calendar
 from django.http import JsonResponse
 import json
 
@@ -145,7 +146,8 @@ def cadastro(request):
         "pagadores": get_pagadores(),
         "tipos_titulo": get_tipos_titulo(),
         "origens": get_origens(),
-        "formas_contato": get_formas_contato()
+        "formas_contato": get_formas_contato(),
+        "situacoes": get_situacoes()
     }
     return render(request, 'cadastro.html', params)
 
@@ -162,7 +164,7 @@ def importacao(request):
 
 def submit_cadastro(request):
     erros_cadastro = get_erros_cadastro(request)
-    if erros_cadastro == None:
+    if not erros_cadastro:
         set_titulo(request)
         messages.success(request, 'Cadastro gravado com sucesso')
     else:
@@ -279,18 +281,21 @@ def pagamento(request):
         messages.warning(
             request, 'Efetue o login')
         return redirect('login')
-
-    data_atual = datetime.today()
     
-    data_inicial = str(data_atual - timedelta(days=180))[0:10]
+    data_inicial = get_data_inicial_mes()
     if 'data_inicial' in request.POST:
         data_inicial = request.POST['data_inicial']
 
-    data_final = str(data_atual + timedelta(days=180))[0:10]
+    data_final = get_data_final_mes()
     if 'data_final' in request.POST:
         data_final = request.POST['data_final']
 
+    search = ''
+    if 'search' in request.POST:
+        search = request.POST['search']
+
     pagamentos = get_pagamentos(data_inicial, data_final)
+    filtered_pagamentos = []
 
     quantidade_pagamentos = 0
     valor_pago = 0
@@ -311,8 +316,14 @@ def pagamento(request):
             pagamento.data_pagamento_formatada = DateFormat(pagamento.data_pagamento)
             pagamento.data_pagamento_formatada = pagamento.data_pagamento_formatada.format('Y-m-d')
 
+        has_value = len(search) > 0 and (str(search).lower() in str(pagamento.cedente.nome).lower() or str(search).lower() in str(pagamento.sacado.nome).lower())
+
+        if (not search or has_value):
+            filtered_pagamentos.append(pagamento)
+
     dados = {
-        'pagamentos': pagamentos,
+        'pagamentos': filtered_pagamentos,
+        'search': search,
         'quantidade_pagamentos': quantidade_pagamentos,
         'valor_pago': valor_pago,
         'valores_face': valores_face,
@@ -329,18 +340,21 @@ def acordo(request):
             request, 'Efetue o login')
         return redirect('login')
 
-    data_atual = datetime.today()
+    search = ''
+    if 'search' in request.POST:
+        search = request.POST['search']
     
-    data_inicial = str(data_atual - timedelta(days=180))[0:10]
+    data_inicial = get_data_inicial_mes()
     if 'data_inicial' in request.POST:
         data_inicial = request.POST['data_inicial']
 
-    data_final = str(data_atual + timedelta(days=180))[0:10]
+    data_final = get_data_final_mes()
     if 'data_final' in request.POST:
         data_final = request.POST['data_final']
 
     cedentes = []
     sacados = []
+    filtered_acordos = []
 
     acordos = get_acordos(data_inicial, data_final)
     for acordo in acordos:
@@ -355,20 +369,27 @@ def acordo(request):
         acordo.observacoes = get_titulo_observacoes(acordo.id)
         acordo.anexos = get_titulo_anexos(acordo.id)
     
-        if not acordo.cedente.nome in cedentes:
-            cedentes.append(acordo.cedente.nome)
+        has_value = len(search) > 0 and (str(search).lower() in str(acordo.cedente.nome).lower() or str(search).lower() in str(acordo.sacado.nome).lower())
 
         dados_sacado = {
             "cedente": acordo.cedente.nome,
             "sacado": acordo.sacado.nome
         }
-        if not dados_sacado in sacados:
-            sacados.append(dados_sacado)
+
+        if (not search or has_value):
+            if not acordo.cedente.nome in cedentes:
+                cedentes.append(acordo.cedente.nome)
+
+            if not dados_sacado in sacados:
+                sacados.append(dados_sacado)
+
+            filtered_acordos.append(acordo)
 
     dados = {
         'cedentes': cedentes,
         'sacados': sacados,
-        'acordos': acordos,
+        'acordos': filtered_acordos,
+        'search': search,
         'data_inicial': data_inicial,
         'data_final': data_final,
         'situacoes': get_situacoes(),
@@ -384,13 +405,11 @@ def juridico_externo(request):
             request, 'Efetue o login')
         return redirect('login')
 
-    data_atual = datetime.today()
-    
-    data_inicial = str(data_atual - timedelta(days=180))[0:10]
+    data_inicial = get_data_inicial_mes()
     if 'data_inicial' in request.POST:
         data_inicial = request.POST['data_inicial']
 
-    data_final = str(data_atual + timedelta(days=180))[0:10]
+    data_final = get_data_final_mes()
     if 'data_final' in request.POST:
         data_final = request.POST['data_final']
 
@@ -412,3 +431,11 @@ def juridico_externo(request):
         'situacoes': get_situacoes()
     }
     return render(request, 'juridico_externo.html', dados)
+
+def get_data_inicial_mes():
+    return str(datetime.today().replace(day=1))[0:10]
+
+def get_data_final_mes():
+    data_inicial = str(datetime.today().replace(day=1))[0:10]
+    ultimo_dia_mes = calendar.monthrange(int(data_inicial[0:4]), int(data_inicial[5:7]))[1]
+    return str(datetime.today().replace(day=ultimo_dia_mes))[0:10]
