@@ -344,7 +344,7 @@ def acordo(request):
     if 'search' in request.POST:
         search = request.POST['search']
     
-    data_inicial = get_data_inicial_mes()
+    data_inicial = ''
     if 'data_inicial' in request.POST:
         data_inicial = request.POST['data_inicial']
 
