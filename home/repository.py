@@ -208,8 +208,8 @@ def update_observacoes(request):
                 observacao.save()
 
 def create_pagamento_parcial(request, is_acordo):
-    if "data_pagamento" in request.POST and len(request.POST['data_pagamento']) > 0 and "valor_pagamento" in request.POST and len(request.POST['valor_pagamento']) > 0 :
-        data_pagamento = str(request.POST['data_pagamento'])
+    if "data_pagamento_parcial" in request.POST and len(request.POST['data_pagamento_parcial']) > 0 and "valor_pagamento" in request.POST and len(request.POST['valor_pagamento']) > 0 :
+        data_pagamento = str(request.POST['data_pagamento_parcial'])
         valor_pagamento = float(str(request.POST['valor_pagamento']).replace(',', '.'))
 
         descricao = 'PAGO'
